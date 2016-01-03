@@ -1,0 +1,11 @@
+*.iml
+lib/
+.gradle/
+build/
+gradle/
+gradlew
+gradlew.bat
+Offset Scanner.jar
+*.MF
+launch4jconf.xml
+*.exe
