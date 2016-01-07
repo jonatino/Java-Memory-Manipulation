@@ -32,8 +32,10 @@ public interface NativeProcess {
 				Kernel32.CloseHandle(snapshot);
 			}
 		} else if ((os.contains("mac")) || (os.contains("darwin"))) {
+			throw new UnsupportedOperationException("Unknown mac system! (" + os + ")");
 			//MAC
 		} else if (os.contains("nux")) {
+			throw new UnsupportedOperationException("Unknown linux system! (" + os + ")");
 			//Linux
 		} else {
 			throw new UnsupportedOperationException("Unknown operating system! (" + os + ")");
