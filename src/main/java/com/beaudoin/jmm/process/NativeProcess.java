@@ -10,6 +10,8 @@ import com.sun.jna.platform.win32.Tlhelp32;
 import java.nio.ByteBuffer;
 import java.util.Locale;
 
+import static com.beaudoin.jmm.misc.Cacheable.buffer;
+
 /**
  * Created by Jonathan on 12/12/15.
  */
@@ -47,6 +49,12 @@ public interface NativeProcess {
 
 	Module findModule(String moduleName);
 
+	ByteBuffer read(Pointer address, int bytesToRead);
+
+	NativeProcess write(Pointer address, ByteBuffer buffer);
+
+	boolean canRead(Pointer address, int bytesToRead);
+
 	default byte readByte(long address) {
 		return read(address, 1).get();
 	}
@@ -81,12 +89,35 @@ public interface NativeProcess {
 		return read(Cacheable.pointer(address), bytesToRead);
 	}
 
+	default NativeProcess writeBoolean(long address, boolean value) {
+		return write(Cacheable.pointer(address), buffer(1).put((byte) (value ? 1 : 0)));
+	}
+	
+	default NativeProcess writeByte(long address, int value) {
+		return write(Cacheable.pointer(address), buffer(1).put((byte) value));
+	}
+	
+	default NativeProcess writeShort(long address, int value) {
+		return write(Cacheable.pointer(address), buffer(2).putShort((short) value));
+	}
+	
+	default NativeProcess writeInt(long address, int value) {
+		return write(Cacheable.pointer(address), buffer(4).putInt(value));
+	}
+	
+	default NativeProcess writeLong(long address, long value) {
+		return write(Cacheable.pointer(address), buffer(8).putLong(value));
+	}
+	
+	default NativeProcess writeFloat(long address, float value) {
+		return write(Cacheable.pointer(address), buffer(4).putFloat(value));
+	}
+	
+	default NativeProcess writeDouble(long address, double value) {
+		return write(Cacheable.pointer(address), buffer(8).putDouble(value));
+	}
+
 	default boolean canRead(long address, int bytesToRead) {
 		return canRead(Cacheable.pointer(address), bytesToRead);
 	}
-
-	ByteBuffer read(Pointer address, int bytesToRead);
-
-	boolean canRead(Pointer address, int bytesToRead);
-
 }

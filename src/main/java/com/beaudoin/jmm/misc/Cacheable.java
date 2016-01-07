@@ -3,32 +3,23 @@ package com.beaudoin.jmm.misc;
 import com.sun.jna.Pointer;
 
 import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
+
+import static java.nio.ByteBuffer.allocateDirect;
+import static java.nio.ByteOrder.nativeOrder;
 
 public final class Cacheable {
-	
-	private static final int ALLOCATION_SIZE = 8_192_000;
+
+	private static final Map<Integer, ByteBuffer> bufferCache = new HashMap<>();
+	private static final Function<Integer, ByteBuffer> cachedFunction = k -> allocateDirect(k).order(nativeOrder());
 	private static final Pointer cachedPointer = new Pointer(0);
-	private static ByteBuffer cachedBuffer = null;
-	
-	private static ByteBuffer allocate(int size) {
-		if (size >= ALLOCATION_SIZE) {
-			return ByteBuffer.allocateDirect(size);
-		}
-		if (cachedBuffer == null || size > cachedBuffer.remaining()) {
-			cachedBuffer = ByteBuffer.allocateDirect(ALLOCATION_SIZE);
-		}
-		cachedBuffer.limit(cachedBuffer.position() + size);
-		ByteBuffer result = cachedBuffer.slice();
-		cachedBuffer.position(cachedBuffer.limit());
-		cachedBuffer.limit(cachedBuffer.capacity());
-		return result;
-	}
-	
+
 	public static ByteBuffer buffer(int size) {
-		return allocate(size).order(ByteOrder.nativeOrder());
+		return (ByteBuffer) bufferCache.computeIfAbsent(size, cachedFunction).clear();
 	}
-	
+
 	public static Pointer pointer(long address) {
 		Pointer.nativeValue(cachedPointer, address);
 		return cachedPointer;
