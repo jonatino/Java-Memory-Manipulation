@@ -15,14 +15,16 @@ public final class Kernel32 {
 		Native.register(NativeLibrary.getInstance("Kernel32", W32APIOptions.UNICODE_OPTIONS));
 	}
 
-	public static native Pointer CreateToolhelp32Snapshot(WinDef.DWORD var1, int var2);
+	public static native Pointer CreateToolhelp32Snapshot(WinDef.DWORD dword, int junk);
 
-	public static native boolean CloseHandle(Pointer var1);
+	public static native boolean CloseHandle(Pointer pointer);
 
 	public static native Pointer OpenProcess(int desired, boolean inherit, int pid);
 
-	public static native boolean Process32Next(Pointer var1, Tlhelp32.PROCESSENTRY32 var2);
+	public static native boolean Process32Next(Pointer pointer, Tlhelp32.PROCESSENTRY32 entry);
 
-	public static native boolean ReadProcessMemory(Pointer process, Pointer address, ByteBuffer memory, int size, int written);
+	public static native long ReadProcessMemory(Pointer process, Pointer address, ByteBuffer memory, int size, int written);
+
+	public static native long WriteProcessMemory(Pointer process, Pointer address, ByteBuffer memory, int size, int written);
 
 }
