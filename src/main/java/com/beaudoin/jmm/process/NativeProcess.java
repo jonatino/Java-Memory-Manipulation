@@ -4,6 +4,7 @@ import com.beaudoin.jmm.misc.Cacheable;
 import com.beaudoin.jmm.natives.windows.Kernel32;
 import com.beaudoin.jmm.process.impl.WindowsProcess;
 import com.sun.jna.Native;
+import com.sun.jna.Platform;
 import com.sun.jna.Pointer;
 import com.sun.jna.platform.win32.Tlhelp32;
 
@@ -18,8 +19,7 @@ import static com.beaudoin.jmm.misc.Cacheable.buffer;
 public interface NativeProcess {
 
 	static NativeProcess byName(String name) {
-		String os = System.getProperty("os.name", "generic").toLowerCase(Locale.ENGLISH);
-		if (os.contains("win")) {
+		if (Platform.isWindows()) {
 			Tlhelp32.PROCESSENTRY32.ByReference entry = new Tlhelp32.PROCESSENTRY32.ByReference();
 			Pointer snapshot = Kernel32.CreateToolhelp32Snapshot(Tlhelp32.TH32CS_SNAPALL, 0);
 			try {
@@ -33,12 +33,14 @@ public interface NativeProcess {
 			} finally {
 				Kernel32.CloseHandle(snapshot);
 			}
-		} else if ((os.contains("mac")) || (os.contains("darwin"))) {
+		} else if (Platform.isMac()) {
+			throw new UnsupportedOperationException("Unknown mac system! (" + System.getProperty("os.name") + ")");
 			//MAC
-		} else if (os.contains("nux")) {
+		} else if (Platform.isLinux()) {
+			throw new UnsupportedOperationException("Unknown linux system! (" + System.getProperty("os.name") + ")");
 			//Linux
 		} else {
-			throw new UnsupportedOperationException("Unknown operating system! (" + os + ")");
+			throw new UnsupportedOperationException("Unknown operating system! (" + System.getProperty("os.name") + ")");
 		}
 		throw new IllegalStateException("Process " + name + " was not found. Are you sure its running?");
 	}
