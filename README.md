@@ -15,3 +15,4 @@ We use some really cool technology to drive Abendigo. Here's a list:
 
 As of right now the project is currently not complete. The following are features I plan on adding:
  - OSX compatibility
+ - Documentation
