@@ -5,8 +5,6 @@ This library is licensed under LGPL 3.0 and was created for game hacking/modding
 
 ---
 
-This project is a utility for my CSGO cheat Abendigo.
-
 ### Dependencies
 
 We use some really cool technology to drive Abendigo. Here's a list:
