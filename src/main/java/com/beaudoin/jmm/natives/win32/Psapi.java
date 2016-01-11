@@ -1,7 +1,7 @@
-package com.beaudoin.jmm.natives.windows;
+package com.beaudoin.jmm.natives.win32;
 
 import com.beaudoin.jmm.process.Module;
-import com.beaudoin.jmm.process.impl.WindowsProcess;
+import com.beaudoin.jmm.process.impl.win32.Wind32Process;
 import com.sun.jna.Native;
 import com.sun.jna.NativeLibrary;
 import com.sun.jna.Pointer;
@@ -24,7 +24,7 @@ public final class Psapi {
 		Native.register(NativeLibrary.getInstance("Psapi"));
 	}
 
-	public static Map<String, Module> getModules(WindowsProcess process) {
+	public static Map<String, Module> getModules(Wind32Process process) {
 		Map<String, Module> modules = new HashMap<>();
 
 		WinDef.HMODULE[] lphModules = new WinDef.HMODULE[1024];

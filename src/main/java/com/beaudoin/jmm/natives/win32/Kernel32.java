@@ -1,4 +1,4 @@
-package com.beaudoin.jmm.natives.windows;
+package com.beaudoin.jmm.natives.win32;
 
 import com.beaudoin.jmm.misc.MemoryBuffer;
 import com.sun.jna.Native;
