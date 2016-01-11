@@ -1,9 +1,8 @@
 package com.beaudoin.jmm.process;
 
 
+import com.sun.jna.Memory;
 import com.sun.jna.Pointer;
-
-import java.nio.ByteBuffer;
 
 public final class Module {
 
@@ -12,7 +11,7 @@ public final class Module {
 	private final long address;
 	private final int size;
 	private final Pointer pointer;
-	private ByteBuffer data;
+	private Memory data;
 
 	public Module(NativeProcess process, String name, Pointer pointer, int size) {
 		this.process = process;
@@ -42,11 +41,11 @@ public final class Module {
 		return address;
 	}
 
-	public ByteBuffer data() {
+	public Memory data() {
 		return data(false);
 	}
 
-	public ByteBuffer data(boolean forceNew) {
+	public Memory data(boolean forceNew) {
 		if (forceNew || data == null) {
 			data = process().read(pointer(), size());
 		}

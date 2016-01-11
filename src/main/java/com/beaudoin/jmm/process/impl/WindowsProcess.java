@@ -5,11 +5,11 @@ import com.beaudoin.jmm.natives.windows.Kernel32;
 import com.beaudoin.jmm.natives.windows.Psapi;
 import com.beaudoin.jmm.process.Module;
 import com.beaudoin.jmm.process.NativeProcess;
+import com.sun.jna.Memory;
 import com.sun.jna.Native;
 import com.sun.jna.Pointer;
 import com.sun.jna.platform.win32.Win32Exception;
 
-import java.nio.ByteBuffer;
 import java.util.Map;
 
 /**
@@ -45,25 +45,25 @@ public final class WindowsProcess implements NativeProcess {
 	}
 
 	@Override
-	public ByteBuffer read(Pointer address, int bytesToRead) {
-		ByteBuffer buffer = Cacheable.buffer(bytesToRead);
-		if (Kernel32.ReadProcessMemory(pointer(), address, buffer, bytesToRead, 0) == 0) {
+	public Memory read(Pointer address, int size) {
+		Memory buffer = Cacheable.buffer(size);
+		if (Kernel32.ReadProcessMemory(pointer(), address, buffer, size, 0) == 0) {
 			throw new Win32Exception(Native.getLastError());
 		}
 		return buffer;
 	}
 
 	@Override
-	public NativeProcess write(Pointer address, ByteBuffer buffer) {
-		if (Kernel32.WriteProcessMemory(pointer(), address, (ByteBuffer) buffer.flip(), buffer.limit(), 0) == 0) {
+	public NativeProcess write(Pointer address, Memory buffer) {
+		if (Kernel32.WriteProcessMemory(pointer(), address, buffer, (int) buffer.size(), 0) == 0) {
 			throw new Win32Exception(Native.getLastError());
 		}
 		return this;
 	}
 
 	@Override
-	public boolean canRead(Pointer address, int bytesToRead) {
-		return Kernel32.ReadProcessMemory(pointer(), address, Cacheable.buffer(bytesToRead), bytesToRead, 0) == 0;
+	public boolean canRead(Pointer address, int size) {
+		return Kernel32.ReadProcessMemory(pointer(), address, Cacheable.buffer(size), size, 0) != 0;
 	}
 
 }

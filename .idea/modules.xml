@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Java Memory Manipulation.iml" filepath="$PROJECT_DIR$/Java Memory Manipulation.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../Abendigo/Offset Scanner/Abendigo-Offset-Scanner/Offset Scanner.iml" filepath="$PROJECT_DIR$/../Abendigo/Offset Scanner/Abendigo-Offset-Scanner/Offset Scanner.iml" />
     </modules>
   </component>
 </project>
