@@ -8,11 +8,9 @@ import com.beaudoin.jmm.process.NativeProcess;
 public final class Main {
 
 	public static void main(String[] args) {
-		NativeProcess process = NativeProcess.byName("csgo.exe");
+		NativeProcess process = NativeProcess.byId(57480);
 
-		while (true) {
-			//process.readInt(176881852);
-		}
+		System.out.println(process.readInt(0x7f0364049664L));
 	}
 
 }
