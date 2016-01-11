@@ -4,6 +4,7 @@ _Java Based Memory, Process, Module Interfacing_
 This library is licensed under MIT License and was created for game hacking/modding via memory modifications.
 
 Feel free to fork or use this project as long as you credit me for my work.
+
 ---
 
 ### Dependencies
