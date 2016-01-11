@@ -9,7 +9,6 @@ import java.util.function.Function;
 public final class Cacheable {
 
 	private static final Map<Integer, MemoryBuffer> bufferCache = new HashMap<>();
-
 	private static final Function<Integer, MemoryBuffer> cachedFunction = MemoryBuffer::new;
 	private static final Pointer cachedPointer = new Pointer(0);
 
