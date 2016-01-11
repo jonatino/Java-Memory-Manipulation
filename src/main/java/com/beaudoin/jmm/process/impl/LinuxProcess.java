@@ -14,6 +14,9 @@ import java.util.Map;
  */
 public final class LinuxProcess implements NativeProcess {
 
+	private uio.iovec local = new uio.iovec();
+	private uio.iovec remote = new uio.iovec();
+
 	private final int id;
 	private final Pointer handle;
 	private Map<String, Module> modules;
@@ -42,14 +45,9 @@ public final class LinuxProcess implements NativeProcess {
 	@Override
 	public Memory read(Pointer address, int size) {
 		Memory buffer = Cacheable.buffer(size);
-		uio.iovec local = new uio.iovec();
 		local.iov_base = buffer;
-		local.iov_len = size;
-
-		uio.iovec remote = new uio.iovec();
 		remote.iov_base = address;
-		remote.iov_len = size;
-
+		remote.iov_len = local.iov_len = size;
 		if (uio.process_vm_readv(id, local, 1, remote, 1, 0) != size) {
 			throw new RuntimeException("Read memory failed at address " + Pointer.nativeValue(address) + " size " + size);
 		}
@@ -58,14 +56,9 @@ public final class LinuxProcess implements NativeProcess {
 
 	@Override
 	public NativeProcess write(Pointer address, Memory buffer) {
-		uio.iovec local = new uio.iovec();
 		local.iov_base = buffer;
-		local.iov_len = (int) buffer.size();
-
-		uio.iovec remote = new uio.iovec();
 		remote.iov_base = address;
-		remote.iov_len = (int) buffer.size();
-
+		remote.iov_len = local.iov_len = (int) buffer.size();
 		if (uio.process_vm_writev(id, local, 1, remote, 1, 0) != buffer.size()) {
 			throw new RuntimeException("Read memory failed at address " + Pointer.nativeValue(address) + " size " + buffer.size());
 		}
@@ -74,7 +67,12 @@ public final class LinuxProcess implements NativeProcess {
 
 	@Override
 	public boolean canRead(Pointer address, int size) {
-		return false;//Kernel32.ReadProcessMemory(pointer(), address, Cacheable.buffer(bytesToRead), bytesToRead, 0) == 0;
+		try {
+			read(address, size);
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
 	}
 
 }
