@@ -1,4 +1,4 @@
-package com.beaudoin.jmm.natives.linux;
+package com.beaudoin.jmm.natives.unix;
 
 import com.sun.jna.*;
 

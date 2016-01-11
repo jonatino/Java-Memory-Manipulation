@@ -13,11 +13,11 @@ public final class Module {
 	private final Pointer pointer;
 	private MemoryBuffer data;
 
-	public Module(NativeProcess process, String name, Pointer pointer, int size) {
+	public Module(NativeProcess process, String name, Pointer pointer, long size) {
 		this.process = process;
 		this.name = name;
 		this.address = Pointer.nativeValue(pointer);
-		this.size = size;
+		this.size = (int) size;
 		this.pointer = pointer;
 	}
 

@@ -3,13 +3,16 @@ package com.beaudoin.jmm.process;
 import com.beaudoin.jmm.misc.Cacheable;
 import com.beaudoin.jmm.misc.MemoryBuffer;
 import com.beaudoin.jmm.misc.Strings;
-import com.beaudoin.jmm.natives.windows.Kernel32;
-import com.beaudoin.jmm.process.impl.LinuxProcess;
-import com.beaudoin.jmm.process.impl.WindowsProcess;
+import com.beaudoin.jmm.natives.win32.Kernel32;
+import com.beaudoin.jmm.process.impl.unix.UnixProcess;
+import com.beaudoin.jmm.process.impl.win32.Wind32Process;
 import com.sun.jna.Native;
 import com.sun.jna.Platform;
 import com.sun.jna.Pointer;
 import com.sun.jna.platform.win32.Tlhelp32;
+
+import java.io.IOException;
+import java.util.Scanner;
 
 import static com.beaudoin.jmm.misc.Cacheable.buffer;
 
@@ -36,8 +39,13 @@ public interface NativeProcess {
 			throw new UnsupportedOperationException("Unknown mac system! (" + System.getProperty("os.name") + ")");
 			//MAC
 		} else if (Platform.isLinux()) {
-			throw new UnsupportedOperationException("Unknown linux system! (" + System.getProperty("os.name") + ")");
-			//Linux
+			try {
+				int processid = Integer.parseInt(new Scanner(Runtime.getRuntime().exec("ps -C "+name+" -o pid").getInputStream()).useDelimiter("\\A").next().replaceAll("[^0-9]",""));
+				return byId(processid);
+			} catch (Exception e) {
+				e.printStackTrace();
+				//throw new IllegalStateException("Process " + name + " was not found. Are you sure its running?");
+			}
 		} else {
 			throw new UnsupportedOperationException("Unknown operating system! (" + System.getProperty("os.name") + ")");
 		}
@@ -46,12 +54,12 @@ public interface NativeProcess {
 
 	static NativeProcess byId(int id) {
 		if (Platform.isWindows()) {
-			return new WindowsProcess(id, Kernel32.OpenProcess(0x438, true, id));
+			return new Wind32Process(id, Kernel32.OpenProcess(0x438, true, id));
 		} else if (Platform.isMac()) {
 			throw new UnsupportedOperationException("Unknown mac system! (" + System.getProperty("os.name") + ")");
 			//MAC
 		} else if (Platform.isLinux()) {
-			return new LinuxProcess(id, null);
+			return new UnixProcess(id, null);
 		} else {
 			throw new IllegalStateException("Process " + id + " was not found. Are you sure its running?");
 		}
@@ -60,6 +68,8 @@ public interface NativeProcess {
 	int id();
 
 	Pointer pointer();
+
+	void initModules();
 
 	Module findModule(String moduleName);
 
