@@ -1,11 +1,11 @@
 package com.beaudoin.jmm.process.impl;
 
 import com.beaudoin.jmm.misc.Cacheable;
+import com.beaudoin.jmm.misc.MemoryBuffer;
 import com.beaudoin.jmm.natives.windows.Kernel32;
 import com.beaudoin.jmm.natives.windows.Psapi;
 import com.beaudoin.jmm.process.Module;
 import com.beaudoin.jmm.process.NativeProcess;
-import com.sun.jna.Memory;
 import com.sun.jna.Native;
 import com.sun.jna.Pointer;
 import com.sun.jna.platform.win32.Win32Exception;
@@ -45,8 +45,8 @@ public final class WindowsProcess implements NativeProcess {
 	}
 
 	@Override
-	public Memory read(Pointer address, int size) {
-		Memory buffer = Cacheable.buffer(size);
+	public MemoryBuffer read(Pointer address, int size) {
+		MemoryBuffer buffer = Cacheable.buffer(size);
 		if (Kernel32.ReadProcessMemory(pointer(), address, buffer, size, 0) == 0) {
 			throw new Win32Exception(Native.getLastError());
 		}
@@ -54,8 +54,8 @@ public final class WindowsProcess implements NativeProcess {
 	}
 
 	@Override
-	public NativeProcess write(Pointer address, Memory buffer) {
-		if (Kernel32.WriteProcessMemory(pointer(), address, buffer, (int) buffer.size(), 0) == 0) {
+	public NativeProcess write(Pointer address, MemoryBuffer buffer) {
+		if (Kernel32.WriteProcessMemory(pointer(), address, buffer, buffer.size(), 0) == 0) {
 			throw new Win32Exception(Native.getLastError());
 		}
 		return this;

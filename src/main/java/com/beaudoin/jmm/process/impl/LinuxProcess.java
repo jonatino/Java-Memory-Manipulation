@@ -1,10 +1,10 @@
 package com.beaudoin.jmm.process.impl;
 
 import com.beaudoin.jmm.misc.Cacheable;
+import com.beaudoin.jmm.misc.MemoryBuffer;
 import com.beaudoin.jmm.natives.linux.uio;
 import com.beaudoin.jmm.process.Module;
 import com.beaudoin.jmm.process.NativeProcess;
-import com.sun.jna.Memory;
 import com.sun.jna.Pointer;
 
 import java.util.Map;
@@ -43,8 +43,8 @@ public final class LinuxProcess implements NativeProcess {
 	}
 
 	@Override
-	public Memory read(Pointer address, int size) {
-		Memory buffer = Cacheable.buffer(size);
+	public MemoryBuffer read(Pointer address, int size) {
+		MemoryBuffer buffer = Cacheable.buffer(size);
 		local.iov_base = buffer;
 		remote.iov_base = address;
 		remote.iov_len = local.iov_len = size;
@@ -55,10 +55,10 @@ public final class LinuxProcess implements NativeProcess {
 	}
 
 	@Override
-	public NativeProcess write(Pointer address, Memory buffer) {
+	public NativeProcess write(Pointer address, MemoryBuffer buffer) {
 		local.iov_base = buffer;
 		remote.iov_base = address;
-		remote.iov_len = local.iov_len = (int) buffer.size();
+		remote.iov_len = local.iov_len = buffer.size();
 		if (uio.process_vm_writev(id, local, 1, remote, 1, 0) != buffer.size()) {
 			throw new RuntimeException("Read memory failed at address " + Pointer.nativeValue(address) + " size " + buffer.size());
 		}

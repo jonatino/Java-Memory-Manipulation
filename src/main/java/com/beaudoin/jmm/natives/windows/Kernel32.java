@@ -1,6 +1,6 @@
 package com.beaudoin.jmm.natives.windows;
 
-import com.sun.jna.Memory;
+import com.beaudoin.jmm.misc.MemoryBuffer;
 import com.sun.jna.Native;
 import com.sun.jna.NativeLibrary;
 import com.sun.jna.Pointer;
@@ -22,8 +22,8 @@ public final class Kernel32 {
 
 	public static native boolean Process32Next(Pointer pointer, Tlhelp32.PROCESSENTRY32 entry);
 
-	public static native long ReadProcessMemory(Pointer process, Pointer address, Memory memory, int size, int written);
+	public static native long ReadProcessMemory(Pointer process, Pointer address, MemoryBuffer memory, int size, int written);
 
-	public static native long WriteProcessMemory(Pointer process, Pointer address, Memory memory, int size, int written);
+	public static native long WriteProcessMemory(Pointer process, Pointer address, MemoryBuffer memory, int size, int written);
 
 }

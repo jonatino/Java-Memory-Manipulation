@@ -1,11 +1,11 @@
 package com.beaudoin.jmm.process;
 
 import com.beaudoin.jmm.misc.Cacheable;
+import com.beaudoin.jmm.misc.MemoryBuffer;
 import com.beaudoin.jmm.misc.Strings;
 import com.beaudoin.jmm.natives.windows.Kernel32;
 import com.beaudoin.jmm.process.impl.LinuxProcess;
 import com.beaudoin.jmm.process.impl.WindowsProcess;
-import com.sun.jna.Memory;
 import com.sun.jna.Native;
 import com.sun.jna.Platform;
 import com.sun.jna.Pointer;
@@ -63,86 +63,72 @@ public interface NativeProcess {
 
 	Module findModule(String moduleName);
 
-	Memory read(Pointer address, int size);
+	MemoryBuffer read(Pointer address, int size);
 
-	NativeProcess write(Pointer address, Memory buffer);
+	NativeProcess write(Pointer address, MemoryBuffer buffer);
 
 	boolean canRead(Pointer address, int size);
 
-	default byte readByte(long address) {
-		return read(address, 1).getByte(0);
+	default int readByte(long address) {
+		return read(address, 1).getByte();
 	}
 
 	default int readShort(long address) {
-		return read(address, 2).getShort(0);
+		return read(address, 2).getShort();
 	}
 
 	default int readInt(long address) {
-		return read(address, 4).getInt(0);
+		return read(address, 4).getInt();
 	}
 
 	default long readLong(long address) {
-		return read(address, 8).getLong(0);
+		return read(address, 8).getLong();
 	}
 
 	default float readFloat(long address) {
-		return read(address, 4).getFloat(0);
+		return read(address, 4).getFloat();
 	}
 
 	default double readDouble(long address) {
-		return read(address, 8).getDouble(0);
+		return read(address, 8).getDouble();
 	}
 
 	default String readString(long address, int length) {
 		byte[] bytes = new byte[length];
-		read(address, bytes.length).read(0, bytes, 0, length);
+		read(address, bytes.length).get(bytes);
 		return Strings.transform(bytes);
 	}
 
-	default Memory read(long address, int size) {
+	default MemoryBuffer read(long address, int size) {
 		return read(Cacheable.pointer(address), size);
 	}
 
 	default NativeProcess writeBoolean(long address, boolean value) {
-		Memory m = buffer(1);
-		m.setByte(0, (byte) (value ? 1 : 0));
-		return write(Cacheable.pointer(address), m);
+		return write(Cacheable.pointer(address), buffer(1).putBoolean(value));
 	}
 	
 	default NativeProcess writeByte(long address, int value) {
-		Memory m = buffer(1);
-		m.setByte(0, (byte) value);
-		return write(Cacheable.pointer(address), m);
+		return write(Cacheable.pointer(address), buffer(1).putByte(value));
 	}
 	
 	default NativeProcess writeShort(long address, int value) {
-		Memory m = buffer(2);
-		m.setShort(0, (short) value);
-		return write(Cacheable.pointer(address), m);
+		return write(Cacheable.pointer(address), buffer(2).putShort(value));
 	}
 	
 	default NativeProcess writeInt(long address, int value) {
-		Memory m = buffer(4);
-		m.setInt(0, value);
-		return write(Cacheable.pointer(address), m);
+		return write(Cacheable.pointer(address), buffer(4).putInt(value));
 	}
 	
 	default NativeProcess writeLong(long address, long value) {
-		Memory m = buffer(8);
-		m.setLong(0, value);
-		return write(Cacheable.pointer(address), m);
+		return write(Cacheable.pointer(address), buffer(8).putLong(value));
 	}
 	
 	default NativeProcess writeFloat(long address, float value) {
-		Memory m = buffer(4);
-		m.setFloat(0, value);
-		return write(Cacheable.pointer(address), m);
+		return write(Cacheable.pointer(address), buffer(4).putFloat(value));
 	}
 	
 	default NativeProcess writeDouble(long address, double value) {
-		Memory m = buffer(8);
-		m.setDouble(0, value);
-		return write(Cacheable.pointer(address), m);
+		return write(Cacheable.pointer(address), buffer(8).putDouble(value));
 	}
 
 	default boolean canRead(long address, int size) {
