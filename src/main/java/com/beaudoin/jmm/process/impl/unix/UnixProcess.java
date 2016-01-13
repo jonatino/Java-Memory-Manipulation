@@ -22,23 +22,16 @@ public final class UnixProcess implements NativeProcess {
 	private uio.iovec remote = new uio.iovec();
 
 	private final int id;
-	private final Pointer handle;
 	private Map<String, Module> modules = new HashMap<>();
 
-	public UnixProcess(int id, Pointer handle) {
+	public UnixProcess(int id) {
 		this.id = id;
-		this.handle = handle;
 		initModules();
 	}
 
 	@Override
 	public int id() {
 		return id;
-	}
-
-	@Override
-	public Pointer pointer() {
-		return handle;
 	}
 
 	@Override

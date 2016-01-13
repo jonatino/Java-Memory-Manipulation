@@ -3,16 +3,17 @@ package com.beaudoin.jmm.process;
 import com.beaudoin.jmm.misc.Cacheable;
 import com.beaudoin.jmm.misc.MemoryBuffer;
 import com.beaudoin.jmm.misc.Strings;
+import com.beaudoin.jmm.misc.Utils;
+import com.beaudoin.jmm.natives.mac.mac;
 import com.beaudoin.jmm.natives.win32.Kernel32;
+import com.beaudoin.jmm.process.impl.mac.MacProcess;
 import com.beaudoin.jmm.process.impl.unix.UnixProcess;
-import com.beaudoin.jmm.process.impl.win32.Wind32Process;
+import com.beaudoin.jmm.process.impl.win32.Win32Process;
 import com.sun.jna.Native;
 import com.sun.jna.Platform;
 import com.sun.jna.Pointer;
 import com.sun.jna.platform.win32.Tlhelp32;
-
-import java.io.IOException;
-import java.util.Scanner;
+import com.sun.jna.ptr.IntByReference;
 
 import static com.beaudoin.jmm.misc.Cacheable.buffer;
 
@@ -35,17 +36,8 @@ public interface NativeProcess {
 			} finally {
 				Kernel32.CloseHandle(snapshot);
 			}
-		} else if (Platform.isMac()) {
-			throw new UnsupportedOperationException("Unknown mac system! (" + System.getProperty("os.name") + ")");
-			//MAC
-		} else if (Platform.isLinux()) {
-			try {
-				int processid = Integer.parseInt(new Scanner(Runtime.getRuntime().exec("ps -C "+name+" -o pid").getInputStream()).useDelimiter("\\A").next().replaceAll("[^0-9]",""));
-				return byId(processid);
-			} catch (Exception e) {
-				e.printStackTrace();
-				//throw new IllegalStateException("Process " + name + " was not found. Are you sure its running?");
-			}
+		} else if (Platform.isMac() || Platform.isLinux()) {
+			return byId(Utils.exec("bash", "-c", "ps -A | grep -m1 \"clion\" | awk '{print $1}'"));
 		} else {
 			throw new UnsupportedOperationException("Unknown operating system! (" + System.getProperty("os.name") + ")");
 		}
@@ -54,20 +46,21 @@ public interface NativeProcess {
 
 	static NativeProcess byId(int id) {
 		if (Platform.isWindows()) {
-			return new Wind32Process(id, Kernel32.OpenProcess(0x438, true, id));
+			return new Win32Process(id, Kernel32.OpenProcess(0x438, true, id));
 		} else if (Platform.isMac()) {
-			throw new UnsupportedOperationException("Unknown mac system! (" + System.getProperty("os.name") + ")");
-			//MAC
+			IntByReference out = new IntByReference();
+			if (mac.task_for_pid(mac.mach_task_self(), id, out) != 0) {
+				throw new IllegalStateException("Failed to find mach task port for process, ensure you are running as sudo.");
+			}
+			return new MacProcess(id, out.getValue());
 		} else if (Platform.isLinux()) {
-			return new UnixProcess(id, null);
+			return new UnixProcess(id);
 		} else {
 			throw new IllegalStateException("Process " + id + " was not found. Are you sure its running?");
 		}
 	}
 
 	int id();
-
-	Pointer pointer();
 
 	void initModules();
 
@@ -116,27 +109,27 @@ public interface NativeProcess {
 	default NativeProcess writeBoolean(long address, boolean value) {
 		return write(Cacheable.pointer(address), buffer(1).putBoolean(value));
 	}
-	
+
 	default NativeProcess writeByte(long address, int value) {
 		return write(Cacheable.pointer(address), buffer(1).putByte(value));
 	}
-	
+
 	default NativeProcess writeShort(long address, int value) {
 		return write(Cacheable.pointer(address), buffer(2).putShort(value));
 	}
-	
+
 	default NativeProcess writeInt(long address, int value) {
 		return write(Cacheable.pointer(address), buffer(4).putInt(value));
 	}
-	
+
 	default NativeProcess writeLong(long address, long value) {
 		return write(Cacheable.pointer(address), buffer(8).putLong(value));
 	}
-	
+
 	default NativeProcess writeFloat(long address, float value) {
 		return write(Cacheable.pointer(address), buffer(4).putFloat(value));
 	}
-	
+
 	default NativeProcess writeDouble(long address, double value) {
 		return write(Cacheable.pointer(address), buffer(8).putDouble(value));
 	}

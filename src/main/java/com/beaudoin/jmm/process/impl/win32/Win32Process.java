@@ -10,32 +10,30 @@ import com.sun.jna.Native;
 import com.sun.jna.Pointer;
 import com.sun.jna.platform.win32.Win32Exception;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Created by Jonathan on 11/13/2015.
  */
-public final class Wind32Process implements NativeProcess {
+public final class Win32Process implements NativeProcess {
 
 	private final int id;
 	private final Pointer handle;
 	private Map<String, Module> modules;
 
-	public Wind32Process(int id, Pointer handle) {
+	public Win32Process(int id, Pointer handle) {
 		this.id = id;
 		this.handle = handle;
 		initModules();
 	}
 
-	@Override
-	public int id() {
-		return id;
+	public Pointer pointer() {
+		return handle;
 	}
 
 	@Override
-	public Pointer pointer() {
-		return handle;
+	public int id() {
+		return id;
 	}
 
 	@Override
