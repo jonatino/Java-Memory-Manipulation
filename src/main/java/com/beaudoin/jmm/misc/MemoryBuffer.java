@@ -86,4 +86,10 @@ public final class MemoryBuffer extends Pointer {
 		return size;
 	}
 
+	public byte[] array() {
+		byte[] data = new byte[size];
+		get(data);
+		return data;
+	}
+
 }
