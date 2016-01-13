@@ -7,14 +7,12 @@ Feel free to fork or use this project as long as you credit me for my work.
 
 ---
 
-### Dependencies
-
-We use some really cool technology to drive Abendigo. Here's a list:
+### Dependencies]
 
 - [Java Native Access (JNA)](https://github.com/java-native-access/jna) as the backbone for interfacing with native libraries
 
 ### Plans
 
 As of right now the project is currently not complete. The following are features I plan on adding:
- - OSX compatibility
+ - GUI
  - Documentation
