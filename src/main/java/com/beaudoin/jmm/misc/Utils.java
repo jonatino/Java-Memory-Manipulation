@@ -9,12 +9,12 @@ import java.util.Scanner;
  */
 public final class Utils {
 
-    public static int exec(String... command) {
-        try {
-            return Integer.parseInt(new Scanner(Runtime.getRuntime().exec(command).getInputStream()).next());
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to read output from " + Arrays.toString(command));
-        }
-    }
+	public static int exec(String... command) {
+		try {
+			return Integer.parseInt(new Scanner(Runtime.getRuntime().exec(command).getInputStream()).next());
+		} catch (IOException e) {
+			throw new RuntimeException("Failed to read output from " + Arrays.toString(command));
+		}
+	}
 
 }

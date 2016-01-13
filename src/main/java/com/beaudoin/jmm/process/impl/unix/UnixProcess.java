@@ -18,10 +18,9 @@ import java.util.Map;
  */
 public final class UnixProcess implements NativeProcess {
 
+	private final int id;
 	private uio.iovec local = new uio.iovec();
 	private uio.iovec remote = new uio.iovec();
-
-	private final int id;
 	private Map<String, Module> modules = new HashMap<>();
 
 	public UnixProcess(int id) {
