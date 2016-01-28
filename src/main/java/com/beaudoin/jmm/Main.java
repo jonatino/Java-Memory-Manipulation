@@ -24,6 +24,8 @@
 
 package com.beaudoin.jmm;
 
+import com.beaudoin.jmm.process.NativeProcess;
+
 import java.io.IOException;
 
 /**
@@ -32,6 +34,8 @@ import java.io.IOException;
 public final class Main {
 
     public static void main(String[] args) throws IOException {
+        NativeProcess proc = NativeProcess.byName("C__Stuff.exe");
+        System.out.println(proc.readInt(0x61ff1c));
     }
 
 }

@@ -4,5 +4,12 @@
     <mapping directory="" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/../Abendigo/Offset Scanner/Abendigo-Offset-Scanner" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/../Abendigo/Offset Scanner/Abendigo-Offset-Scanner" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../Abendigo/Offset Scanner/Abendigo-Offset-Scanner" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../FernFlower" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../FernFlower" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../FernFlower" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$" vcs="Git" />
   </component>
 </project>

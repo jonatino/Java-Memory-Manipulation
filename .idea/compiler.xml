@@ -23,11 +23,27 @@
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
         <module name="Java-Memory-Manipulation" />
+        <module name="Offset-Scanner" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="Java Memory Manipulation" target="1.8" />
       <module name="Java-Memory-Manipulation" target="1.8" />
+      <module name="mstrobel_procyon_fa7db1e6bf42_main" target="1.7" />
+      <module name="mstrobel_procyon_fa7db1e6bf42_test" target="1.7" />
+      <module name="Offset-Scanner" target="1.8" />
+      <module name="Procyon_CompilerTools_main" target="1.7" />
+      <module name="Procyon_CompilerTools_test" target="1.7" />
+      <module name="Procyon_Core_main" target="1.7" />
+      <module name="Procyon_Core_test" target="1.7" />
+      <module name="Procyon_Decompiler_main" target="1.7" />
+      <module name="Procyon_Decompiler_test" target="1.7" />
+      <module name="Procyon_Expressions_main" target="1.7" />
+      <module name="Procyon_Expressions_test" target="1.7" />
+      <module name="Procyon_Reflection_main" target="1.7" />
+      <module name="Procyon_Reflection_test" target="1.7" />
     </bytecodeTargetLevel>
+  </component>
+  <component name="EclipseCompilerSettings">
+    <option name="ADDITIONAL_OPTIONS_STRING" value="-g:none" />
   </component>
 </project>
