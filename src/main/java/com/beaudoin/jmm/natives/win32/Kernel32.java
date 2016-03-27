@@ -30,6 +30,7 @@ import com.sun.jna.NativeLibrary;
 import com.sun.jna.Pointer;
 import com.sun.jna.platform.win32.Tlhelp32;
 import com.sun.jna.platform.win32.WinDef;
+import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.win32.W32APIOptions;
 
 public final class Kernel32 {
@@ -49,5 +50,9 @@ public final class Kernel32 {
 	public static native long ReadProcessMemory(Pointer process, Pointer address, MemoryBuffer memory, int size, int written);
 
 	public static native long WriteProcessMemory(Pointer process, Pointer address, MemoryBuffer memory, int size, int written);
+
+	public static native WinDef.HMODULE GetModuleHandle(String value);
+
+	public static native boolean GetExitCodeProcess(Pointer hProcess, IntByReference lpExitCode);
 
 }
