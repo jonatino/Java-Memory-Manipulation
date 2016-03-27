@@ -2,12 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/../FernFlower/FernFlower Improved.iml" filepath="$PROJECT_DIR$/../FernFlower/FernFlower Improved.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../Java Decompile Test/Java Decompile Test.iml" filepath="$PROJECT_DIR$/../Java Decompile Test/Java Decompile Test.iml" />
       <module fileurl="file://$PROJECT_DIR$/Java-Memory-Manipulation.iml" filepath="$PROJECT_DIR$/Java-Memory-Manipulation.iml" />
-      <module fileurl="file://$USER_HOME$/Desktop/jode-1.1.2-pre1/rofl/Jode.iml" filepath="$USER_HOME$/Desktop/jode-1.1.2-pre1/rofl/Jode.iml" />
       <module fileurl="file://$PROJECT_DIR$/../Abendigo/Offset Scanner/Abendigo-Offset-Scanner/Offset-Scanner.iml" filepath="$PROJECT_DIR$/../Abendigo/Offset Scanner/Abendigo-Offset-Scanner/Offset-Scanner.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../College Work/Semester 4/Software Testing/Software Testing.iml" filepath="$PROJECT_DIR$/../College Work/Semester 4/Software Testing/Software Testing.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../Abendigo/Abendigo Beta/abendigo beta.iml" filepath="$PROJECT_DIR$/../Abendigo/Abendigo Beta/abendigo beta.iml" />
     </modules>
   </component>
 </project>
