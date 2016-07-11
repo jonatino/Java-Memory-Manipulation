@@ -4,7 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Java-Memory-Manipulation.iml" filepath="$PROJECT_DIR$/Java-Memory-Manipulation.iml" />
       <module fileurl="file://$PROJECT_DIR$/../Abendigo/Offset Scanner/Abendigo-Offset-Scanner/Offset-Scanner.iml" filepath="$PROJECT_DIR$/../Abendigo/Offset Scanner/Abendigo-Offset-Scanner/Offset-Scanner.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../Abendigo/Abendigo Beta/Xena.iml" filepath="$PROJECT_DIR$/../Abendigo/Abendigo Beta/Xena.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../Abendigo/Xena/Xena.iml" filepath="$PROJECT_DIR$/../Abendigo/Xena/Xena.iml" />
       <module fileurl="file://$PROJECT_DIR$/../Abendigo/Abendigo Beta/abendigo beta.iml" filepath="$PROJECT_DIR$/../Abendigo/Abendigo Beta/abendigo beta.iml" />
     </modules>
   </component>
