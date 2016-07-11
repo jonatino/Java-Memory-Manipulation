@@ -25,12 +25,14 @@
         <module name="abendigo beta" />
         <module name="Java-Memory-Manipulation" />
         <module name="Offset-Scanner" />
+        <module name="Xena" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="abendigo beta" target="1.8" />
       <module name="Java-Memory-Manipulation" target="1.8" />
       <module name="Offset-Scanner" target="1.8" />
+      <module name="Xena" target="1.8" />
     </bytecodeTargetLevel>
   </component>
   <component name="EclipseCompilerSettings">
