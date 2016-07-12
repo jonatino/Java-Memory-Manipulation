@@ -24,22 +24,35 @@
 
 package com.beaudoin.jmm.misc;
 
+import net.openhft.hashing.LongHashFunction;
+
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by Jonathan on 12/21/2015.
  */
 public final class Strings {
 
-	public static String transform(byte[] bytes) {
-		for (int i = 0; i < bytes.length; i++) {
-			if (bytes[i] == 0) {
-				bytes[i] = 32;
-			}
-		}
-		return new String(bytes).split(" ")[0].trim();
-	}
+    private static Map<Long, String> map = new HashMap<>(16_982);
 
-	public static String hex(int value) {
-		return "0x" + Integer.toHexString(value).toUpperCase();
-	}
+    public static String transform(byte[] bytes) {
+        long hash = LongHashFunction.xx_r39().hashBytes(bytes);
+        if (map.containsKey(hash)) {
+            return map.get(hash);
+        }
+        for (int i = 0; i < bytes.length; i++) {
+            if (bytes[i] == 0) {
+                bytes[i] = 32;
+            }
+        }
+        String string = new String(bytes).split(" ")[0].trim().intern();
+        map.put(hash, string);
+        return string;
+    }
+
+    public static String hex(int value) {
+        return "0x" + Integer.toHexString(value).toUpperCase();
+    }
 
 }
