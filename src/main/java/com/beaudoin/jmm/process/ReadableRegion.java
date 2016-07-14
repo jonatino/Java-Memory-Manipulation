@@ -34,6 +34,10 @@ public interface ReadableRegion {
         return read(address, 4).getInt();
     }
 
+    default long readUnsignedInt(long address) {
+        return Integer.toUnsignedLong(read(address, 4).getInt());
+    }
+
     default long readLong(long address) {
         return read(address, 8).getLong();
     }
