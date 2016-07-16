@@ -1,3 +1,7 @@
+[![Build Status](https://travis-ci.org/Jonatino/Java-Memory-Manipulation.svg?branch=master)](https://travis-ci.org/Jonatino/Java-Memory-Manipulation)
+[![license](https://img.shields.io/badge/license-LGPL%203.0-yellowgreen.svg)](https://github.com/Jonatino/Java-Memory-Manipulation/blob/master/LICENSE)
+[![Release](https://jitpack.io/v/Jonatino/Java-Memory-Manipulation.svg)](https://jitpack.io/#Jonatino/Java-Memory-Manipulation)
+
 # Java-Memory-Manipulation
 _Java Based Memory, Process, Module Interfacing_
 
