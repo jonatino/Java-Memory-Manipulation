@@ -41,55 +41,71 @@ import java.util.Map;
  */
 public final class Win32Process implements NativeProcess {
 
-	private final int id;
-	private final Pointer handle;
-	private Map<String, Module> modules;
+    private final int id;
+    private final Pointer handle;
+    private Map<String, Module> modules;
 
-	public Win32Process(int id, Pointer handle) {
-		this.id = id;
-		this.handle = handle;
-		initModules();
-	}
+    public Win32Process(int id, Pointer handle) {
+        this.id = id;
+        this.handle = handle;
+        initModules();
+    }
 
-	public Pointer pointer() {
-		return handle;
-	}
+    public Pointer pointer() {
+        return handle;
+    }
 
-	@Override
-	public int id() {
-		return id;
-	}
+    @Override
+    public int id() {
+        return id;
+    }
 
-	@Override
-	public void initModules() {
-		modules = Psapi.getModules(this);
-	}
+    @Override
+    public void initModules() {
+        System.out.println("hi");
+        modules = Psapi.getModules(this);
+    }
 
-	@Override
-	public Module findModule(String moduleName) {
-		return modules.get(moduleName);
-	}
+    @Override
+    public Module findModule(String moduleName) {
+        Module module = modules.get(moduleName);
+        if (module == null) {
+            int attempts = 60;
+            for (; attempts-- > 0 && module == null; initModules()) {
+                module = modules.get(moduleName);
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (module == null) {
+                throw new RuntimeException(moduleName + " was not found!");
+            }
+        }
+        return modules.get(moduleName);
+    }
 
-	@Override
-	public MemoryBuffer read(Pointer address, int size) {
-		MemoryBuffer buffer = Cacheable.buffer(size);
-		if (Kernel32.ReadProcessMemory(pointer(), address, buffer, size, 0) == 0) {
-			throw new Win32Exception(Native.getLastError());
-		}
-		return buffer;
-	}
+    @Override
+    public MemoryBuffer read(Pointer address, int size) {
+        MemoryBuffer buffer = Cacheable.buffer(size);
+        if (Kernel32.ReadProcessMemory(pointer(), address, buffer, size, 0) == 0) {
+            throw new Win32Exception(Native.getLastError());
+        }
+        return buffer;
+    }
 
-	@Override
-	public NativeProcess write(Pointer address, MemoryBuffer buffer) {
-		if (Kernel32.WriteProcessMemory(pointer(), address, buffer, buffer.size(), 0) == 0) {
-			throw new Win32Exception(Native.getLastError());
-		}
-		return this;
-	}
+    @Override
+    public NativeProcess write(Pointer address, MemoryBuffer buffer) {
+        if (Kernel32.WriteProcessMemory(pointer(), address, buffer, buffer.size(), 0) == 0) {
+            throw new Win32Exception(Native.getLastError());
+        }
+        return this;
+    }
 
-	@Override
-	public boolean canRead(Pointer address, int size) {
-		return Kernel32.ReadProcessMemory(pointer(), address, Cacheable.buffer(size), size, 0) != 0;
-	}
+    @Override
+    public boolean canRead(Pointer address, int size) {
+        return Kernel32.ReadProcessMemory(pointer(), address, Cacheable.buffer(size), size, 0) != 0;
+    }
 
 }
