@@ -62,7 +62,6 @@ public final class Win32Process implements NativeProcess {
 
     @Override
     public void initModules() {
-        System.out.println("hi");
         modules = Psapi.getModules(this);
     }
 
