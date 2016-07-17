@@ -24,6 +24,7 @@
 
 package com.beaudoin.jmm.natives.win32;
 
+import com.beaudoin.jmm.misc.Strings;
 import com.beaudoin.jmm.process.Module;
 import com.beaudoin.jmm.process.impl.win32.Win32Process;
 import com.sun.jna.Native;
@@ -48,19 +49,20 @@ public final class Psapi {
 		Native.register(NativeLibrary.getInstance("Psapi"));
 	}
 
-	public static Map<String, Module> getModules(Win32Process process) {
-		Map<String, Module> modules = new HashMap<>();
+	private final static WinDef.HMODULE[] lphModules = new WinDef.HMODULE[1024];
+	private final static IntByReference lpcbNeededs = new IntByReference();
+	private final static PsapiStdCall.LPMODULEINFO moduleInfo = new PsapiStdCall.LPMODULEINFO();
+	private final static Map<String, Module> modules = new HashMap<>();
 
-		WinDef.HMODULE[] lphModules = new WinDef.HMODULE[1024];
-		IntByReference lpcbNeededs = new IntByReference();
-		PsapiStdCall.LPMODULEINFO moduleInfo = new PsapiStdCall.LPMODULEINFO();
+	public static Map<String, Module> getModules(Win32Process process) {
+		modules.clear();
 
 		EnumProcessModulesEx(process.pointer(), lphModules, lphModules.length, lpcbNeededs, 0x03);
 		for (int i = 0; i < lpcbNeededs.getValue() / 4; i++) {
 			WinDef.HMODULE hModule = lphModules[i];
 			if (GetModuleInformation(process.pointer(), hModule, moduleInfo, moduleInfo.size())) {
 				if (moduleInfo.lpBaseOfDll != null) {
-					String moduleName = GetModuleBaseNameA(process.pointer(), hModule);
+					String moduleName = Strings.transform(GetModuleBaseNameA(process.pointer(), hModule));
 					modules.put(moduleName, new Module(process, moduleName, hModule.getPointer(), moduleInfo.SizeOfImage));
 				}
 			}
@@ -72,13 +74,14 @@ public final class Psapi {
 
 	public static native int GetModuleBaseNameA(Pointer hProcess, WinDef.HMODULE hModule, byte[] lpImageFileName, int nSize);
 
-	private static String GetModuleBaseNameA(Pointer hProcess, WinDef.HMODULE hModule) {
-		byte[] lpImageFileName = new byte[128];
+	private static byte[] lpImageFileName = new byte[128];
+
+	private static byte[] GetModuleBaseNameA(Pointer hProcess, WinDef.HMODULE hModule) {
 		GetModuleBaseNameA(hProcess, hModule, lpImageFileName, lpImageFileName.length);
-		return Native.toString(lpImageFileName);
+		return lpImageFileName;
 	}
 
-	public static boolean EnumProcessModulesEx(Pointer hProcess, WinDef.HMODULE[] lphModule, int cb, IntByReference lpcbNeededs, int flags) {
+	private static boolean EnumProcessModulesEx(Pointer hProcess, WinDef.HMODULE[] lphModule, int cb, IntByReference lpcbNeededs, int flags) {
 		return psapi.EnumProcessModulesEx(hProcess, lphModule, cb, lpcbNeededs, flags);
 	}
 
