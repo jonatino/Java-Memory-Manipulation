@@ -51,7 +51,7 @@ public interface ReadableRegion {
     }
 
     default String readString(long address, int length) {
-        byte[] bytes = new byte[length];
+        byte[] bytes = Cacheable.array(length);
         read(address, bytes.length).get(bytes);
         return Strings.transform(bytes);
     }

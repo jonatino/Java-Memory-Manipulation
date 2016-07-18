@@ -34,12 +34,20 @@ import java.util.function.Function;
 public final class Cacheable {
 
 	private static final Map<Integer, MemoryBuffer> bufferCache = new HashMap<>();
-	private static final Function<Integer, MemoryBuffer> cachedFunction = MemoryBuffer::new;
+	private static final Function<Integer, MemoryBuffer> butterCreate = MemoryBuffer::new;
+
+	private static final Map<Integer, byte[]> arrayCache = new HashMap<>();
+	private static final Function<Integer, byte[]> arrayCreate = byte[]::new;
+
 	private static final Pointer cachedPointer = new Pointer(0);
 	public static final IntByReference INT_BY_REF = new IntByReference();
 
 	public static MemoryBuffer buffer(int size) {
-		return bufferCache.computeIfAbsent(size, cachedFunction);
+		return bufferCache.computeIfAbsent(size, butterCreate);
+	}
+
+	public static byte[] array(int size) {
+		return arrayCache.computeIfAbsent(size, arrayCreate);
 	}
 
 	public static Pointer pointer(long address) {

@@ -111,7 +111,7 @@ public final class MemoryBuffer extends Pointer {
 	}
 
 	public byte[] array() {
-		byte[] data = new byte[size];
+		byte[] data = Cacheable.array(size);
 		get(data);
 		return data;
 	}
