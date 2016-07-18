@@ -103,4 +103,9 @@ public final class Module implements ReadableRegion {
         return Kernel32.ReadProcessMemory(((Win32Process) process()).pointer(), Cacheable.pointer(address() + Pointer.nativeValue(offset)), Cacheable.buffer(size), size, 0) != 0;
     }
 
+    @Override
+    public String toString() {
+        return "Module{" + "name='" + name + '\'' + ", address=" + address + ", size=" + size + '}';
+    }
+
 }
