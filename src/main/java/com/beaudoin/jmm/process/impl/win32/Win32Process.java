@@ -68,6 +68,9 @@ public final class Win32Process implements NativeProcess {
         try {
             while (Kernel32.Module32NextW(snapshot, entry)) {
                 String name = entry.szModule();
+                if (modules.containsKey(name)) {
+                    continue;
+                }
                 modules.put(name, new Module(this, name, entry.getPointer(), entry.modBaseSize.intValue()));
             }
         } finally {
@@ -79,20 +82,9 @@ public final class Win32Process implements NativeProcess {
     public Module findModule(String moduleName) {
         Module module = modules.get(moduleName);
         if (module == null) {
-            int attempts = 60;
-            for (; attempts-- > 0 && module == null; initModules()) {
-                module = modules.get(moduleName);
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (module == null) {
-                throw new RuntimeException(moduleName + " was not found!");
-            }
+            initModules();
         }
-        return modules.get(moduleName);
+        return module;
     }
 
     @Override
