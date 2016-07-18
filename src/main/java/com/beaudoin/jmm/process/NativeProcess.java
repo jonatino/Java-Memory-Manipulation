@@ -45,7 +45,7 @@ public interface NativeProcess extends ReadableRegion {
     static NativeProcess byName(String name) {
         if (Platform.isWindows()) {
             Tlhelp32.PROCESSENTRY32.ByReference entry = new Tlhelp32.PROCESSENTRY32.ByReference();
-            Pointer snapshot = Kernel32.CreateToolhelp32Snapshot(Tlhelp32.TH32CS_SNAPALL, 0);
+            Pointer snapshot = Kernel32.CreateToolhelp32Snapshot(Tlhelp32.TH32CS_SNAPALL.intValue(), 0);
             try {
                 while (Kernel32.Process32Next(snapshot, entry)) {
                     String processName = Native.toString(entry.szExeFile);

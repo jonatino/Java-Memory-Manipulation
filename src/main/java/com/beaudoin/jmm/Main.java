@@ -24,9 +24,12 @@
 
 package com.beaudoin.jmm;
 
+import com.beaudoin.jmm.process.Module;
 import com.beaudoin.jmm.process.NativeProcess;
 
 import java.io.IOException;
+
+import static com.beaudoin.jmm.process.NativeProcess.byName;
 
 /**
  * Created by Jonathan on 12/22/2015.
@@ -34,7 +37,10 @@ import java.io.IOException;
 public final class Main {
 
     public static void main(String[] args) throws IOException {
-        NativeProcess proc = NativeProcess.byName("C__Stuff.exe");
+        NativeProcess proc = byName("csgo.exe");
+
+        Module client = proc.findModule("client.dll");
+        System.out.println(client);
         //System.out.println(proc.readInt(0x61ff1c));
     }
 
