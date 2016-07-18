@@ -27,13 +27,14 @@ package com.beaudoin.jmm.process.impl.win32;
 import com.beaudoin.jmm.misc.Cacheable;
 import com.beaudoin.jmm.misc.MemoryBuffer;
 import com.beaudoin.jmm.natives.win32.Kernel32;
-import com.beaudoin.jmm.natives.win32.Psapi;
 import com.beaudoin.jmm.process.Module;
 import com.beaudoin.jmm.process.NativeProcess;
 import com.sun.jna.Native;
 import com.sun.jna.Pointer;
+import com.sun.jna.platform.win32.Tlhelp32;
 import com.sun.jna.platform.win32.Win32Exception;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -43,7 +44,7 @@ public final class Win32Process implements NativeProcess {
 
     private final int id;
     private final Pointer handle;
-    private Map<String, Module> modules;
+    private Map<String, Module> modules = new HashMap<>();
 
     public Win32Process(int id, Pointer handle) {
         this.id = id;
@@ -62,7 +63,16 @@ public final class Win32Process implements NativeProcess {
 
     @Override
     public void initModules() {
-        modules = Psapi.getModules(this);
+        Pointer snapshot = Kernel32.CreateToolhelp32Snapshot(Tlhelp32.TH32CS_SNAPMODULE32.intValue() | Tlhelp32.TH32CS_SNAPMODULE.intValue(), id());
+        Kernel32.MODULEENTRY32W entry = new Kernel32.MODULEENTRY32W.ByReference();
+        try {
+            while (Kernel32.Module32NextW(snapshot, entry)) {
+                String name = entry.szModule();
+                modules.put(name, new Module(this, name, entry.getPointer(), entry.modBaseSize.intValue()));
+            }
+        } finally {
+            Kernel32.CloseHandle(snapshot);
+        }
     }
 
     @Override
