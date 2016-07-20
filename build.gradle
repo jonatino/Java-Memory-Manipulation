@@ -2,7 +2,7 @@ apply plugin: 'java'
 apply plugin: 'maven'
 
 group = 'com.beaudoin.jmm'
-version = '1.4'
+version = '1.5'
 
 repositories {
     mavenCentral()
