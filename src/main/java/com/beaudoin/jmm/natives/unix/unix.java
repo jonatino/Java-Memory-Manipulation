@@ -26,7 +26,6 @@ package com.beaudoin.jmm.natives.unix;
 
 import com.sun.jna.*;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -49,7 +48,7 @@ public final class unix {
 
 		@Override
 		protected List<String> getFieldOrder() {
-			return Arrays.asList("iov_base", "iov_len");
+			return createFieldsOrder("iov_base", "iov_len");
 		}
 
 	}
