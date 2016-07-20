@@ -27,34 +27,25 @@ package com.beaudoin.jmm.process.impl.unix;
 import com.beaudoin.jmm.misc.Cacheable;
 import com.beaudoin.jmm.misc.MemoryBuffer;
 import com.beaudoin.jmm.natives.unix.unix;
+import com.beaudoin.jmm.process.AbstractProcess;
 import com.beaudoin.jmm.process.Module;
-import com.beaudoin.jmm.process.NativeProcess;
+import com.beaudoin.jmm.process.Process;
 import com.sun.jna.Pointer;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by Jonathan on 1/10/2016.
  */
-public final class UnixProcess implements NativeProcess {
+public final class UnixProcess extends AbstractProcess {
 
-	private final int id;
 	private unix.iovec local = new unix.iovec();
 	private unix.iovec remote = new unix.iovec();
-	private Map<String, Module> modules = new HashMap<>();
 
 	public UnixProcess(int id) {
-		this.id = id;
-		initModules();
-	}
-
-	@Override
-	public int id() {
-		return id;
+		super(id);
 	}
 
 	@Override
@@ -91,28 +82,23 @@ public final class UnixProcess implements NativeProcess {
 	}
 
 	@Override
-	public Module findModule(String moduleName) {
-		return modules.get(moduleName);
-	}
-
-	@Override
 	public MemoryBuffer read(Pointer address, int size) {
 		MemoryBuffer buffer = Cacheable.buffer(size);
 		local.iov_base = buffer;
 		remote.iov_base = address;
 		remote.iov_len = local.iov_len = size;
-		if (unix.process_vm_readv(id, local, 1, remote, 1, 0) != size) {
+		if (unix.process_vm_readv(id(), local, 1, remote, 1, 0) != size) {
 			throw new RuntimeException("Read memory failed at address " + Pointer.nativeValue(address) + " size " + size);
 		}
 		return buffer;
 	}
 
 	@Override
-	public NativeProcess write(Pointer address, MemoryBuffer buffer) {
+	public Process write(Pointer address, MemoryBuffer buffer) {
 		local.iov_base = buffer;
 		remote.iov_base = address;
 		remote.iov_len = local.iov_len = buffer.size();
-		if (unix.process_vm_writev(id, local, 1, remote, 1, 0) != buffer.size()) {
+		if (unix.process_vm_writev(id(), local, 1, remote, 1, 0) != buffer.size()) {
 			throw new RuntimeException("Write memory failed at address " + Pointer.nativeValue(address) + " size " + buffer.size());
 		}
 		return this;

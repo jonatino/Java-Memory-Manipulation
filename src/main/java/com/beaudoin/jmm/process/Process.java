@@ -22,24 +22,17 @@
  * SOFTWARE.
  */
 
-package com.beaudoin.jmm;
-
-import com.beaudoin.jmm.process.Module;
-import com.beaudoin.jmm.process.Process;
-
-import java.io.IOException;
-
-import static com.beaudoin.jmm.process.Processes.byName;
+package com.beaudoin.jmm.process;
 
 /**
- * Created by Jonathan on 12/22/2015.
+ * Created by Jonathan on 12/12/15.
  */
-public final class Main {
+public interface Process extends DataSource {
 
-    public static void main(String[] args) throws IOException {
-	    Process proc = byName("csgo.exe");
-	    Module client = proc.findModule("client.dll");
-        System.out.println(client);
-    }
+	int id();
+
+	void initModules();
+
+	Module findModule(String moduleName);
 
 }

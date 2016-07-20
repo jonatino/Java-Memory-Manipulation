@@ -10,11 +10,11 @@ import static com.beaudoin.jmm.misc.Cacheable.buffer;
 /**
  * Created by Jonathan on 3/24/2016.
  */
-public interface ReadableRegion {
+public interface DataSource {
 
     MemoryBuffer read(Pointer address, int size);
 
-    NativeProcess write(Pointer address, MemoryBuffer buffer);
+    Process write(Pointer address, MemoryBuffer buffer);
 
     boolean canRead(Pointer address, int size);
 
@@ -60,31 +60,31 @@ public interface ReadableRegion {
         return read(Cacheable.pointer(address), size);
     }
 
-    default NativeProcess writeBoolean(long address, boolean value) {
+    default Process writeBoolean(long address, boolean value) {
         return write(Cacheable.pointer(address), buffer(1).putBoolean(value));
     }
 
-    default NativeProcess writeByte(long address, int value) {
+    default Process writeByte(long address, int value) {
         return write(Cacheable.pointer(address), buffer(1).putByte(value));
     }
 
-    default NativeProcess writeShort(long address, int value) {
+    default Process writeShort(long address, int value) {
         return write(Cacheable.pointer(address), buffer(2).putShort(value));
     }
 
-    default NativeProcess writeInt(long address, int value) {
+    default Process writeInt(long address, int value) {
         return write(Cacheable.pointer(address), buffer(4).putInt(value));
     }
 
-    default NativeProcess writeLong(long address, long value) {
+    default Process writeLong(long address, long value) {
         return write(Cacheable.pointer(address), buffer(8).putLong(value));
     }
 
-    default NativeProcess writeFloat(long address, float value) {
+    default Process writeFloat(long address, float value) {
         return write(Cacheable.pointer(address), buffer(4).putFloat(value));
     }
 
-    default NativeProcess writeDouble(long address, double value) {
+    default Process writeDouble(long address, double value) {
         return write(Cacheable.pointer(address), buffer(8).putDouble(value));
     }
 

@@ -27,27 +27,23 @@ package com.beaudoin.jmm.process.impl.win32;
 import com.beaudoin.jmm.misc.Cacheable;
 import com.beaudoin.jmm.misc.MemoryBuffer;
 import com.beaudoin.jmm.natives.win32.Kernel32;
+import com.beaudoin.jmm.process.AbstractProcess;
 import com.beaudoin.jmm.process.Module;
-import com.beaudoin.jmm.process.NativeProcess;
+import com.beaudoin.jmm.process.Process;
 import com.sun.jna.Native;
 import com.sun.jna.Pointer;
 import com.sun.jna.platform.win32.Tlhelp32;
 import com.sun.jna.platform.win32.Win32Exception;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * Created by Jonathan on 11/13/2015.
  */
-public final class Win32Process implements NativeProcess {
+public final class Win32Process extends AbstractProcess {
 
-    private final int id;
     private final Pointer handle;
-    private Map<String, Module> modules = new HashMap<>();
 
     public Win32Process(int id, Pointer handle) {
-        this.id = id;
+        super(id);
         this.handle = handle;
         initModules();
     }
@@ -57,34 +53,17 @@ public final class Win32Process implements NativeProcess {
     }
 
     @Override
-    public int id() {
-        return id;
-    }
-
-    @Override
     public void initModules() {
         Pointer snapshot = Kernel32.CreateToolhelp32Snapshot(Tlhelp32.TH32CS_SNAPMODULE32.intValue() | Tlhelp32.TH32CS_SNAPMODULE.intValue(), id());
-        Kernel32.MODULEENTRY32W entry = new Kernel32.MODULEENTRY32W.ByReference();
+        Tlhelp32.MODULEENTRY32W entry = new Tlhelp32.MODULEENTRY32W.ByReference();
         try {
             while (Kernel32.Module32NextW(snapshot, entry)) {
                 String name = entry.szModule();
-                if (modules.containsKey(name)) {
-                    continue;
-                }
-                modules.put(name, new Module(this, name, entry.getPointer(), entry.modBaseSize.intValue()));
+                modules.putIfAbsent(name, new Module(this, name, entry.getPointer(), entry.modBaseSize.intValue()));
             }
         } finally {
             Kernel32.CloseHandle(snapshot);
         }
-    }
-
-    @Override
-    public Module findModule(String moduleName) {
-        Module module = modules.get(moduleName);
-        if (module == null) {
-            initModules();
-        }
-        return module;
     }
 
     @Override
@@ -97,7 +76,7 @@ public final class Win32Process implements NativeProcess {
     }
 
     @Override
-    public NativeProcess write(Pointer address, MemoryBuffer buffer) {
+    public Process write(Pointer address, MemoryBuffer buffer) {
         if (Kernel32.WriteProcessMemory(pointer(), address, buffer, buffer.size(), 0) == 0) {
             throw new Win32Exception(Native.getLastError());
         }

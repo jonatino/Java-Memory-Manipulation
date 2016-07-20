@@ -27,22 +27,18 @@ package com.beaudoin.jmm.process;
 
 import com.beaudoin.jmm.misc.Cacheable;
 import com.beaudoin.jmm.misc.MemoryBuffer;
-import com.beaudoin.jmm.natives.win32.Kernel32;
-import com.beaudoin.jmm.process.impl.win32.Win32Process;
-import com.sun.jna.Native;
 import com.sun.jna.Pointer;
-import com.sun.jna.platform.win32.Win32Exception;
 
-public final class Module implements ReadableRegion {
+public final class Module implements DataSource {
 
-    private final NativeProcess process;
+    private final Process process;
     private final String name;
     private final long address;
     private final int size;
     private final Pointer pointer;
     private MemoryBuffer data;
 
-    public Module(NativeProcess process, String name, Pointer pointer, long size) {
+    public Module(Process process, String name, Pointer pointer, long size) {
         this.process = process;
         this.name = name;
         this.address = Pointer.nativeValue(pointer);
@@ -50,7 +46,7 @@ public final class Module implements ReadableRegion {
         this.pointer = pointer;
     }
 
-    public NativeProcess process() {
+    public Process process() {
         return process;
     }
 
@@ -75,32 +71,22 @@ public final class Module implements ReadableRegion {
     }
 
     public MemoryBuffer data(boolean forceNew) {
-        if (forceNew || data == null) {
-            data = process().read(pointer(), size());
-        }
-        return data;
+        return data == null || forceNew ? data = process().read(pointer(), size()) : data;
     }
 
     @Override
     public MemoryBuffer read(Pointer offset, int size) {
-        MemoryBuffer buffer = Cacheable.buffer(size);
-        if (Kernel32.ReadProcessMemory(((Win32Process) process()).pointer(), Cacheable.pointer(address() + Pointer.nativeValue(offset)), buffer, size, 0) == 0) {
-            throw new Win32Exception(Native.getLastError());
-        }
-        return buffer;
+        return process().read(Cacheable.pointer(address() + Pointer.nativeValue(offset)), size);
     }
 
     @Override
-    public NativeProcess write(Pointer offset, MemoryBuffer buffer) {
-        if (Kernel32.WriteProcessMemory(((Win32Process) process()).pointer(), Cacheable.pointer(address() + Pointer.nativeValue(offset)), buffer, buffer.size(), 0) == 0) {
-            throw new Win32Exception(Native.getLastError());
-        }
-        return process();
+    public Process write(Pointer offset, MemoryBuffer buffer) {
+        return process().write(Cacheable.pointer(address() + Pointer.nativeValue(offset)), buffer);
     }
 
     @Override
     public boolean canRead(Pointer offset, int size) {
-        return Kernel32.ReadProcessMemory(((Win32Process) process()).pointer(), Cacheable.pointer(address() + Pointer.nativeValue(offset)), Cacheable.buffer(size), size, 0) != 0;
+        return process().canRead(Cacheable.pointer(address() + Pointer.nativeValue(offset)), size);
     }
 
     @Override

@@ -27,77 +27,59 @@ package com.beaudoin.jmm.process.impl.mac;
 import com.beaudoin.jmm.misc.Cacheable;
 import com.beaudoin.jmm.misc.MemoryBuffer;
 import com.beaudoin.jmm.natives.mac.mac;
-import com.beaudoin.jmm.natives.unix.unix;
-import com.beaudoin.jmm.process.Module;
-import com.beaudoin.jmm.process.NativeProcess;
+import com.beaudoin.jmm.process.AbstractProcess;
+import com.beaudoin.jmm.process.Process;
 import com.sun.jna.Pointer;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import static com.beaudoin.jmm.misc.Cacheable.INT_BY_REF;
 
 /**
  * Created by Jonathan on 1/10/2016.
  */
-public final class MacProcess implements NativeProcess {
+public final class MacProcess extends AbstractProcess {
 
-    private final int id;
-    private final int task;
-    private Map<String, Module> modules = new HashMap<>();
+	private final int task;
 
-    public MacProcess(int id, int mach_task) {
-        this.id = id;
-        this.task = mach_task;
-        initModules();
-    }
+	public MacProcess(int id, int mach_task) {
+		super(id);
+		this.task = mach_task;
+	}
 
-    public int task() {
-        return task;
-    }
+	public int task() {
+		return task;
+	}
 
-    @Override
-    public int id() {
-        return id;
-    }
+	@Override
+	public void initModules() {
+		//TODO
+	}
 
-    @Override
-    public void initModules() {
-        //TODO
-    }
+	@Override
+	public MemoryBuffer read(Pointer address, int size) {
+		MemoryBuffer buffer = Cacheable.buffer(size);
+		if (mac.vm_read(task(), address, size, buffer, INT_BY_REF) != 0 || INT_BY_REF.getValue() != size) {
+			throw new RuntimeException("Read memory failed at address " + Pointer.nativeValue(address) + " size " + size);
+		}
+		Pointer.nativeValue(buffer, Pointer.nativeValue(buffer.getPointer(0)));
+		return buffer;
+	}
 
-    @Override
-    public Module findModule(String moduleName) {
-        //TODO
-        return null;
-    }
+	@Override
+	public Process write(Pointer address, MemoryBuffer buffer) {
+		if (mac.vm_write(task(), address, buffer, buffer.size()) != 0) {
+			throw new RuntimeException("Write memory failed at address " + Pointer.nativeValue(address) + " size " + buffer.size());
+		}
+		return this;
+	}
 
-    @Override
-    public MemoryBuffer read(Pointer address, int size) {
-        MemoryBuffer buffer = Cacheable.buffer(size);
-        if (mac.vm_read(task(), address, size, buffer, INT_BY_REF) != 0 || INT_BY_REF.getValue() != size) {
-            throw new RuntimeException("Read memory failed at address " + Pointer.nativeValue(address) + " size " + size);
-        }
-        Pointer.nativeValue(buffer, Pointer.nativeValue(buffer.getPointer(0)));
-        return buffer;
-    }
-
-    @Override
-    public NativeProcess write(Pointer address, MemoryBuffer buffer) {
-        if (mac.vm_write(task(), address, buffer, buffer.size()) != 0) {
-            throw new RuntimeException("Write memory failed at address " + Pointer.nativeValue(address) + " size " + buffer.size());
-        }
-        return this;
-    }
-
-    @Override
-    public boolean canRead(Pointer address, int size) {
-        try {
-            read(address, size);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
+	@Override
+	public boolean canRead(Pointer address, int size) {
+		try {
+			read(address, size);
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
 
 }
