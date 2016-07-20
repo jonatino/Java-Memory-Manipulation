@@ -51,7 +51,7 @@ public interface DataSource {
     }
 
     default String readString(long address, int length) {
-        byte[] bytes = Cacheable.array(length);
+        byte[] bytes = new byte[length];
         read(address, bytes.length).get(bytes);
         return Strings.transform(bytes);
     }

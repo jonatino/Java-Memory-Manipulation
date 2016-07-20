@@ -34,12 +34,12 @@ import java.util.Map;
  */
 public final class Strings {
 
-    private static Map<Long, String> map = new HashMap<>(16_982);
+    private static Map<Long, String> stringCache = new HashMap<>(16_982);
 
     public static String transform(byte[] bytes) {
         long hash = LongHashFunction.xx_r39().hashBytes(bytes);
-        if (map.containsKey(hash)) {
-            return map.get(hash);
+        if (stringCache.containsKey(hash)) {
+            return stringCache.get(hash);
         }
         for (int i = 0; i < bytes.length; i++) {
             if (bytes[i] == 0) {
@@ -47,7 +47,7 @@ public final class Strings {
             }
         }
         String string = new String(bytes).split(" ")[0].trim().intern();
-        map.put(hash, string);
+        stringCache.put(hash, string);
         return string;
     }
 

@@ -23,7 +23,7 @@ public abstract class AbstractProcess implements Process {
 
 	@Override
 	public Module findModule(String moduleName) {
-		Module module = modules.get(moduleName);
+		Module module = modules.isEmpty() ? null : modules.get(moduleName);
 		if (module == null) {
 			initModules();
 		}

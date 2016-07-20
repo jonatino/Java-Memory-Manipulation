@@ -25,6 +25,7 @@
 package com.beaudoin.jmm.misc;
 
 import com.sun.jna.Pointer;
+import com.sun.jna.platform.win32.WinDef;
 import com.sun.jna.ptr.IntByReference;
 
 import java.util.HashMap;
@@ -34,16 +35,17 @@ import java.util.function.Function;
 public final class Cacheable {
 
 	private static final Map<Integer, MemoryBuffer> bufferCache = new HashMap<>();
-	private static final Function<Integer, MemoryBuffer> butterCreate = MemoryBuffer::new;
+	private static final Function<Integer, MemoryBuffer> bufferCreate = MemoryBuffer::new;
 
 	private static final Map<Integer, byte[]> arrayCache = new HashMap<>();
 	private static final Function<Integer, byte[]> arrayCreate = byte[]::new;
 
 	private static final Pointer cachedPointer = new Pointer(0);
 	public static final IntByReference INT_BY_REF = new IntByReference();
+	public static final WinDef.DWORD DWORD_ZERO = new WinDef.DWORD();
 
 	public static MemoryBuffer buffer(int size) {
-		return bufferCache.computeIfAbsent(size, butterCreate);
+		return bufferCache.computeIfAbsent(size, bufferCreate);
 	}
 
 	public static byte[] array(int size) {

@@ -45,7 +45,6 @@ public final class Win32Process extends AbstractProcess {
     public Win32Process(int id, Pointer handle) {
         super(id);
         this.handle = handle;
-        initModules();
     }
 
     public Pointer pointer() {
@@ -59,7 +58,7 @@ public final class Win32Process extends AbstractProcess {
         try {
             while (Kernel32.Module32NextW(snapshot, entry)) {
                 String name = entry.szModule();
-                modules.putIfAbsent(name, new Module(this, name, entry.getPointer(), entry.modBaseSize.intValue()));
+                modules.putIfAbsent(name, new Module(this, name, entry.hModule.getPointer(), entry.modBaseSize.intValue()));
             }
         } finally {
             Kernel32.CloseHandle(snapshot);
