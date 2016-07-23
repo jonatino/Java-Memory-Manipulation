@@ -1,8 +1,70 @@
-apply plugin: 'java'
-apply plugin: 'maven'
+buildscript {
+    ext.github_user = 'Jonatino'
+    ext.project_name = 'Java-Memory-Manipulation'
+    ext.project_group = 'com.beaudoin.jmm'
+    ext.project_artifact = 'Java-Memory-Manipulation'
+    ext.project_version = '1.6'
 
-group = 'com.beaudoin.jmm'
-version = '1.6'
+    ext.jna_version = '4.3.0-SNAPSHOT'
+
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+}
+
+plugins {
+    id "com.jfrog.bintray" version "1.7"
+}
+
+group project_group
+version project_version
+
+allprojects {
+    apply plugin: 'maven'
+    apply plugin: 'maven-publish'
+    apply plugin: 'java'
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+publishing {
+    publications {
+        publish(MavenPublication) {
+            from components.java
+            groupId project_group
+            artifactId project_artifact
+            version project_version
+            artifact sourcesJar
+        }
+    }
+}
+
+bintray {
+    user = System.getenv('BINTRAY_USER')
+    key = System.getenv('BINTRAY_API_KEY')
+    publications = ['publish']
+    pkg {
+        repo = 'maven'
+        name = project_name
+        licenses = ['GPL-3.0']
+        publicDownloadNumbers = true
+        websiteUrl = "https://github.com/$github_user/$project_name"
+        issueTrackerUrl = "https://github.com/$github_user/$project_name/issues"
+        vcsUrl = "https://github.com/$github_user/${project_name}.git"
+        githubRepo = "$github_user/$project_name"
+        version {
+            name = project_version
+            vcsTag = project_version
+            gpg {
+                sign = true
+            }
+        }
+    }
+}
 
 repositories {
     mavenCentral()
@@ -17,8 +79,4 @@ dependencies {
     compile "net.openhft:zero-allocation-hashing:0.6"
     compile "net.java.dev.jna:jna:$jna_version"
     compile "net.java.dev.jna:jna-platform:$jna_version"
-}
-
-buildscript {
-    ext.jna_version = '4.3.0-SNAPSHOT'
 }
