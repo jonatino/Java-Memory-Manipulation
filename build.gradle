@@ -3,7 +3,7 @@ buildscript {
     ext.project_name = 'Java-Memory-Manipulation'
     ext.project_group = 'com.beaudoin.jmm'
     ext.project_artifact = 'Java-Memory-Manipulation'
-    ext.project_version = '1.6'
+    ext.project_version = '1.6.1'
 
     ext.jna_version = '4.3.0-SNAPSHOT'
 
