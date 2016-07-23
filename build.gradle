@@ -1,9 +1,12 @@
 buildscript {
-    ext.github_user = 'Jonatino'
+    ext.your_github_name = 'Jonatino'
+    ext.your_name = 'Jonathan Beaudoin'
+    ext.your_email = 'jonathanbeaudoin1996@gmail.com'
+
     ext.project_name = 'Java-Memory-Manipulation'
     ext.project_group = 'com.beaudoin.jmm'
     ext.project_artifact = 'Java-Memory-Manipulation'
-    ext.project_version = '1.6.1'
+    ext.project_version = '1.6.2'
 
     ext.jna_version = '4.3.0-SNAPSHOT'
 
@@ -31,14 +34,47 @@ task sourcesJar(type: Jar, dependsOn: classes) {
     from sourceSets.main.allSource
 }
 
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
 publishing {
     publications {
-        publish(MavenPublication) {
+        maven(MavenPublication) {
             from components.java
             groupId project_group
             artifactId project_artifact
             version project_version
             artifact sourcesJar
+            artifact javadocJar
+            pom.withXml {
+                asNode().children().last() + {
+                    resolveStrategy = Closure.DELEGATE_FIRST
+                    name project_name
+                    description project_description
+                    url "https://github.com/$your_github_name/$project_name"
+                    scm {
+                        url "https://github.com/$your_github_name/$project_name"
+                        connection "scm:git:git://github.com/$your_github_name/${project_name}.git"
+                        developerConnection "scm:git:ssh:git@github.com:$your_github_name/${project_name}.git"
+                    }
+                    licenses {
+                        license {
+                            name 'The GNU General Public License, Version 3.0'
+                            url 'https://raw.githubusercontent.com/Jonatino/Java-Memory-Manipulation/master/LICENSE'
+                            distribution 'repo'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id your_github_name
+                            name your_name
+                            email your_email
+                        }
+                    }
+                }
+            }
         }
     }
 }
@@ -46,16 +82,16 @@ publishing {
 bintray {
     user = System.getenv('BINTRAY_USER')
     key = System.getenv('BINTRAY_API_KEY')
-    publications = ['publish']
+    publications = ['maven']
     pkg {
         repo = 'maven'
         name = project_name
         licenses = ['GPL-3.0']
         publicDownloadNumbers = true
-        websiteUrl = "https://github.com/$github_user/$project_name"
-        issueTrackerUrl = "https://github.com/$github_user/$project_name/issues"
-        vcsUrl = "https://github.com/$github_user/${project_name}.git"
-        githubRepo = "$github_user/$project_name"
+        websiteUrl = "https://github.com/$your_github_name/$project_name"
+        issueTrackerUrl = "https://github.com/$your_github_name/$project_name/issues"
+        vcsUrl = "https://github.com/$your_github_name/${project_name}.git"
+        githubRepo = "$your_github_name/$project_name"
         version {
             name = project_version
             vcsTag = project_version
@@ -68,8 +104,6 @@ bintray {
 
 repositories {
     mavenCentral()
-
-    maven { url "https://jitpack.io" }
 
     maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
 
