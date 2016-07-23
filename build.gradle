@@ -4,6 +4,7 @@ buildscript {
     ext.your_email = 'jonathanbeaudoin1996@gmail.com'
 
     ext.project_name = 'Java-Memory-Manipulation'
+    ext.project_description = 'User friendly, Garbage-free, and cross-platform process, module and memory interfacing via the power of Java'
     ext.project_group = 'com.beaudoin.jmm'
     ext.project_artifact = 'Java-Memory-Manipulation'
     ext.project_version = '1.6.2'
