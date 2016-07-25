@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/Jonatino/Java-Memory-Manipulation.svg?branch=master)](https://travis-ci.org/Jonatino/Java-Memory-Manipulation)
 [![Dependency Status](https://www.versioneye.com/user/projects/578b0d13c3d40f004982a121/badge.svg?style=flat)](https://www.versioneye.com/user/projects/578b0d13c3d40f004982a121)
 [ ![Download](https://api.bintray.com/packages/jonatino/maven/Java-Memory-Manipulation/images/download.svg) ](https://bintray.com/jonatino/maven/Java-Memory-Manipulation/_latestVersion)
-[![license](https://img.shields.io/github/license/Jonatino/Java-Memory-Manipulation.svg?style=flat-square)](Apache License 2.0)
+[![license](https://img.shields.io/github/license/Jonatino/Java-Memory-Manipulation.svg?style=flat)](Apache License 2.0)
 
 # Java-Memory-Manipulation
 _Java Based Memory, Process, Module Interfacing_
