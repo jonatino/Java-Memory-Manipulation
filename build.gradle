@@ -7,14 +7,9 @@ buildscript {
     ext.project_description = 'User friendly, Garbage-free, and cross-platform process, module and memory interfacing via the power of Java'
     ext.project_group = 'com.github.jonatino'
     ext.project_artifact = 'Java-Memory-Manipulation'
-    ext.project_version = '1.6.4'
+    ext.project_version = '1.6.5'
 
     ext.jna_version = '4.3.0-SNAPSHOT'
-
-    repositories {
-        mavenCentral()
-        jcenter()
-    }
 }
 
 plugins {
