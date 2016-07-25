@@ -10,7 +10,7 @@ buildscript {
     ext.project_version = '1.6.2'
 
     ext.jna_version = '4.3.0-SNAPSHOT'
-
+    +
     repositories {
         mavenCentral()
         jcenter()
