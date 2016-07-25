@@ -286,7 +286,7 @@ bintray {
     pkg {
         repo = 'maven'
         name = project_name
-        licenses = ['GPL-3.0']
+        licenses = ['Apache License 2.0']
         publicDownloadNumbers = true
         websiteUrl = "https://github.com/$your_github_name/$project_name"
         issueTrackerUrl = "https://github.com/$your_github_name/$project_name/issues"
