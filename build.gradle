@@ -57,7 +57,7 @@ publishing {
                     }
                     licenses {
                         license {
-                            name 'The GNU General Public License, Version 3.0'
+                            name 'Apache License 2.0'
                             url 'https://raw.githubusercontent.com/$your_github_name/$project_name/master/LICENSE'
                             distribution 'repo'
                         }
