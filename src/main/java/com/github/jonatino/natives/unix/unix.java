@@ -22,37 +22,35 @@
  * SOFTWARE.
  */
 
-package com.beaudoin.jmm.misc;
+package com.github.jonatino.natives.unix;
 
-import net.openhft.hashing.LongHashFunction;
+import com.sun.jna.*;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 /**
- * Created by Jonathan on 12/21/2015.
+ * Created by jonathan on 06/01/16.
  */
-public final class Strings {
+public final class unix {
 
-    private static Map<Long, String> stringCache = new HashMap<>(16_982);
+	static {
+		Native.register(NativeLibrary.getInstance("c"));
+	}
 
-    public static String transform(byte[] bytes) {
-        long hash = LongHashFunction.xx_r39().hashBytes(bytes);
-        if (stringCache.containsKey(hash)) {
-            return stringCache.get(hash);
-        }
-        for (int i = 0; i < bytes.length; i++) {
-            if (bytes[i] == 0) {
-                bytes[i] = 32;
-            }
-        }
-        String string = new String(bytes).split(" ")[0].trim().intern();
-        stringCache.put(hash, string);
-        return string;
-    }
+	public static native long process_vm_readv(int pid, iovec local, long liovcnt, iovec remote, long riovcnt, long flags) throws LastErrorException;
 
-    public static String hex(int value) {
-        return "0x" + Integer.toHexString(value).toUpperCase();
-    }
+	public static native long process_vm_writev(int pid, iovec local, long liovcnt, iovec remote, long riovcnt, long flags) throws LastErrorException;
+
+	public static class iovec extends Structure {
+
+		public Pointer iov_base;
+		public int iov_len;
+
+		@Override
+		protected List<String> getFieldOrder() {
+			return createFieldsOrder("iov_base", "iov_len");
+		}
+
+	}
 
 }

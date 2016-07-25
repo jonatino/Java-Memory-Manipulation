@@ -22,35 +22,34 @@
  * SOFTWARE.
  */
 
-package com.beaudoin.jmm.natives.unix;
+package com.github.jonatino.natives.mac;
 
-import com.sun.jna.*;
-
-import java.util.List;
+import com.sun.jna.LastErrorException;
+import com.sun.jna.Native;
+import com.sun.jna.NativeLibrary;
+import com.sun.jna.Pointer;
+import com.sun.jna.ptr.IntByReference;
+import com.sun.jna.ptr.PointerByReference;
 
 /**
- * Created by jonathan on 06/01/16.
+ * Created by Jonathan on 1/11/16.
  */
-public final class unix {
+public final class mac {
 
-	static {
-		Native.register(NativeLibrary.getInstance("c"));
-	}
+    static {
+        Native.register(NativeLibrary.getInstance("c"));
+    }
 
-	public static native long process_vm_readv(int pid, iovec local, long liovcnt, iovec remote, long riovcnt, long flags) throws LastErrorException;
+    public static native int task_for_pid(int taskid, int pid, IntByReference out);
 
-	public static native long process_vm_writev(int pid, iovec local, long liovcnt, iovec remote, long riovcnt, long flags) throws LastErrorException;
+    public static native int mach_task_self();
 
-	public static class iovec extends Structure {
+    public static native int vm_write(int taskId, Pointer address, Pointer buffer, int size);
 
-		public Pointer iov_base;
-		public int iov_len;
+    public static native int vm_read(int taskId, Pointer address, int size, Pointer buffer, IntByReference ref);
 
-		@Override
-		protected List<String> getFieldOrder() {
-			return createFieldsOrder("iov_base", "iov_len");
-		}
+    public static native int vm_read(int taskId, Pointer address, int size, PointerByReference buffer, IntByReference ref);
 
-	}
+    public static native String mach_error_string(int result) throws LastErrorException;
 
 }

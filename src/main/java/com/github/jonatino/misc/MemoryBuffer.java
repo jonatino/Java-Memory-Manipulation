@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package com.beaudoin.jmm.misc;
+package com.github.jonatino.misc;
 
 import com.sun.jna.Native;
 import com.sun.jna.Pointer;

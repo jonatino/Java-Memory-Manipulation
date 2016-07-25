@@ -1,12 +1,12 @@
-package com.beaudoin.jmm.process;
+package com.github.jonatino.process;
 
-import com.beaudoin.jmm.misc.Utils;
-import com.beaudoin.jmm.natives.mac.mac;
-import com.beaudoin.jmm.natives.unix.libc;
-import com.beaudoin.jmm.natives.win32.Kernel32;
-import com.beaudoin.jmm.process.impl.mac.MacProcess;
-import com.beaudoin.jmm.process.impl.unix.UnixProcess;
-import com.beaudoin.jmm.process.impl.win32.Win32Process;
+import com.github.jonatino.misc.Utils;
+import com.github.jonatino.natives.mac.mac;
+import com.github.jonatino.natives.unix.libc;
+import com.github.jonatino.natives.win32.Kernel32;
+import com.github.jonatino.process.impl.mac.MacProcess;
+import com.github.jonatino.process.impl.unix.UnixProcess;
+import com.github.jonatino.process.impl.win32.Win32Process;
 import com.sun.jna.Native;
 import com.sun.jna.Platform;
 import com.sun.jna.Pointer;

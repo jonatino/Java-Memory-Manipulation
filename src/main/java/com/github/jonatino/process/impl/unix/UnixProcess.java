@@ -22,14 +22,14 @@
  * SOFTWARE.
  */
 
-package com.beaudoin.jmm.process.impl.unix;
+package com.github.jonatino.process.impl.unix;
 
-import com.beaudoin.jmm.misc.Cacheable;
-import com.beaudoin.jmm.misc.MemoryBuffer;
-import com.beaudoin.jmm.natives.unix.unix;
-import com.beaudoin.jmm.process.AbstractProcess;
-import com.beaudoin.jmm.process.Module;
-import com.beaudoin.jmm.process.Process;
+import com.github.jonatino.misc.Cacheable;
+import com.github.jonatino.misc.MemoryBuffer;
+import com.github.jonatino.natives.unix.unix;
+import com.github.jonatino.process.AbstractProcess;
+import com.github.jonatino.process.Module;
+import com.github.jonatino.process.Process;
 import com.sun.jna.Pointer;
 
 import java.io.IOException;

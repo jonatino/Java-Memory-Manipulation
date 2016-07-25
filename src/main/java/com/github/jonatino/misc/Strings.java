@@ -22,24 +22,37 @@
  * SOFTWARE.
  */
 
-package com.beaudoin.jmm;
+package com.github.jonatino.misc;
 
-import com.beaudoin.jmm.process.Module;
-import com.beaudoin.jmm.process.Process;
+import net.openhft.hashing.LongHashFunction;
 
-import java.io.IOException;
-
-import static com.beaudoin.jmm.process.Processes.byName;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * Created by Jonathan on 12/22/2015.
+ * Created by Jonathan on 12/21/2015.
  */
-public final class Main {
+public final class Strings {
 
-    public static void main(String[] args) throws IOException {
-	    Process proc = byName("csgo.exe");
-	    Module client = proc.findModule("client.dll");
-        System.out.println(client);
+    private static Map<Long, String> stringCache = new HashMap<>(16_982);
+
+    public static String transform(byte[] bytes) {
+        long hash = LongHashFunction.xx_r39().hashBytes(bytes);
+        if (stringCache.containsKey(hash)) {
+            return stringCache.get(hash);
+        }
+        for (int i = 0; i < bytes.length; i++) {
+            if (bytes[i] == 0) {
+                bytes[i] = 32;
+            }
+        }
+        String string = new String(bytes).split(" ")[0].trim().intern();
+        stringCache.put(hash, string);
+        return string;
+    }
+
+    public static String hex(int value) {
+        return "0x" + Integer.toHexString(value).toUpperCase();
     }
 
 }

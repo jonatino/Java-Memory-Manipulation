@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package com.beaudoin.jmm.natives.unix;
+package com.github.jonatino.natives.unix;
 
 import com.sun.jna.Native;
 import com.sun.jna.NativeLibrary;

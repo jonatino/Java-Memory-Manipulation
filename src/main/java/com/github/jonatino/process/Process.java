@@ -22,33 +22,17 @@
  * SOFTWARE.
  */
 
-package com.beaudoin.jmm.natives.win32;
+package com.github.jonatino.process;
 
-import com.beaudoin.jmm.misc.MemoryBuffer;
-import com.sun.jna.Native;
-import com.sun.jna.NativeLibrary;
-import com.sun.jna.Pointer;
-import com.sun.jna.platform.win32.Tlhelp32;
-import com.sun.jna.win32.W32APIOptions;
+/**
+ * Created by Jonathan on 12/12/15.
+ */
+public interface Process extends DataSource {
 
-public final class Kernel32 {
+	int id();
 
-	static {
-		Native.register(NativeLibrary.getInstance("Kernel32", W32APIOptions.UNICODE_OPTIONS));
-	}
+	void initModules();
 
-	public static native Pointer CreateToolhelp32Snapshot(int flags, int pid);
-
-	public static native boolean CloseHandle(Pointer pointer);
-
-	public static native Pointer OpenProcess(int desired, boolean inherit, int pid);
-
-	public static native boolean Process32Next(Pointer pointer, Tlhelp32.PROCESSENTRY32 entry);
-
-	public static native boolean Module32NextW(Pointer pointer, Tlhelp32.MODULEENTRY32W entry);
-
-	public static native long ReadProcessMemory(Pointer process, Pointer address, MemoryBuffer memory, int size, int written);
-
-	public static native long WriteProcessMemory(Pointer process, Pointer address, MemoryBuffer memory, int size, int written);
+	Module findModule(String moduleName);
 
 }

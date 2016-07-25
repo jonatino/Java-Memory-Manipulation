@@ -1,11 +1,9 @@
-package com.beaudoin.jmm.process;
+package com.github.jonatino.process;
 
-import com.beaudoin.jmm.misc.Cacheable;
-import com.beaudoin.jmm.misc.MemoryBuffer;
-import com.beaudoin.jmm.misc.Strings;
+import com.github.jonatino.misc.Cacheable;
+import com.github.jonatino.misc.MemoryBuffer;
+import com.github.jonatino.misc.Strings;
 import com.sun.jna.Pointer;
-
-import static com.beaudoin.jmm.misc.Cacheable.buffer;
 
 /**
  * Created by Jonathan on 3/24/2016.
@@ -61,31 +59,31 @@ public interface DataSource {
 	}
 
 	default Process writeBoolean(long address, boolean value) {
-		return write(Cacheable.pointer(address), buffer(1).putBoolean(value));
+		return write(Cacheable.pointer(address), Cacheable.buffer(1).putBoolean(value));
 	}
 
 	default Process writeByte(long address, int value) {
-		return write(Cacheable.pointer(address), buffer(1).putByte(value));
+		return write(Cacheable.pointer(address), Cacheable.buffer(1).putByte(value));
 	}
 
 	default Process writeShort(long address, int value) {
-		return write(Cacheable.pointer(address), buffer(2).putShort(value));
+		return write(Cacheable.pointer(address), Cacheable.buffer(2).putShort(value));
 	}
 
 	default Process writeInt(long address, int value) {
-		return write(Cacheable.pointer(address), buffer(4).putInt(value));
+		return write(Cacheable.pointer(address), Cacheable.buffer(4).putInt(value));
 	}
 
 	default Process writeLong(long address, long value) {
-		return write(Cacheable.pointer(address), buffer(8).putLong(value));
+		return write(Cacheable.pointer(address), Cacheable.buffer(8).putLong(value));
 	}
 
 	default Process writeFloat(long address, float value) {
-		return write(Cacheable.pointer(address), buffer(4).putFloat(value));
+		return write(Cacheable.pointer(address), Cacheable.buffer(4).putFloat(value));
 	}
 
 	default Process writeDouble(long address, double value) {
-		return write(Cacheable.pointer(address), buffer(8).putDouble(value));
+		return write(Cacheable.pointer(address), Cacheable.buffer(8).putDouble(value));
 	}
 
 	default boolean canRead(long address, int size) {

@@ -22,11 +22,11 @@
  * SOFTWARE.
  */
 
-package com.beaudoin.jmm.process;
+package com.github.jonatino.process;
 
 
-import com.beaudoin.jmm.misc.Cacheable;
-import com.beaudoin.jmm.misc.MemoryBuffer;
+import com.github.jonatino.misc.Cacheable;
+import com.github.jonatino.misc.MemoryBuffer;
 import com.sun.jna.Pointer;
 
 public final class Module implements DataSource {

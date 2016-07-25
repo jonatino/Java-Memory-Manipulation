@@ -22,39 +22,23 @@
  * SOFTWARE.
  */
 
-package com.beaudoin.jmm.misc;
+package com.github.jonatino;
 
-import com.sun.jna.Pointer;
-import com.sun.jna.platform.win32.WinDef;
-import com.sun.jna.ptr.IntByReference;
+import com.github.jonatino.process.Module;
+import com.github.jonatino.process.Process;
+import com.github.jonatino.process.Processes;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Function;
+import java.io.IOException;
 
-public final class Cacheable {
+/**
+ * Created by Jonathan on 12/22/2015.
+ */
+public final class Main {
 
-	private static final Map<Integer, MemoryBuffer> bufferCache = new HashMap<>();
-	private static final Function<Integer, MemoryBuffer> bufferCreate = MemoryBuffer::new;
-
-	private static final Map<Integer, byte[]> arrayCache = new HashMap<>();
-	private static final Function<Integer, byte[]> arrayCreate = byte[]::new;
-
-	private static final Pointer cachedPointer = new Pointer(0);
-	public static final IntByReference INT_BY_REF = new IntByReference();
-	public static final WinDef.DWORD DWORD_ZERO = new WinDef.DWORD();
-
-	public static MemoryBuffer buffer(int size) {
-		return bufferCache.computeIfAbsent(size, bufferCreate);
-	}
-
-	public static byte[] array(int size) {
-		return arrayCache.computeIfAbsent(size, arrayCreate);
-	}
-
-	public static Pointer pointer(long address) {
-		Pointer.nativeValue(cachedPointer, address);
-		return cachedPointer;
-	}
+    public static void main(String[] args) throws IOException {
+	    Process proc = Processes.byName("csgo.exe");
+	    Module client = proc.findModule("client.dll");
+        System.out.println(client);
+    }
 
 }

@@ -22,17 +22,23 @@
  * SOFTWARE.
  */
 
-package com.beaudoin.jmm.process;
+package com.github.jonatino.misc;
+
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Scanner;
 
 /**
- * Created by Jonathan on 12/12/15.
+ * Created by Jonathan on 1/11/16.
  */
-public interface Process extends DataSource {
+public final class Utils {
 
-	int id();
-
-	void initModules();
-
-	Module findModule(String moduleName);
+	public static int exec(String... command) {
+		try {
+			return Integer.parseInt(new Scanner(Runtime.getRuntime().exec(command).getInputStream()).next());
+		} catch (IOException e) {
+			throw new RuntimeException("Failed to read output from " + Arrays.toString(command));
+		}
+	}
 
 }

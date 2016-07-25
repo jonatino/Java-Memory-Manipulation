@@ -22,34 +22,39 @@
  * SOFTWARE.
  */
 
-package com.beaudoin.jmm.natives.mac;
+package com.github.jonatino.misc;
 
-import com.sun.jna.LastErrorException;
-import com.sun.jna.Native;
-import com.sun.jna.NativeLibrary;
 import com.sun.jna.Pointer;
+import com.sun.jna.platform.win32.WinDef;
 import com.sun.jna.ptr.IntByReference;
-import com.sun.jna.ptr.PointerByReference;
 
-/**
- * Created by Jonathan on 1/11/16.
- */
-public final class mac {
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
 
-    static {
-        Native.register(NativeLibrary.getInstance("c"));
-    }
+public final class Cacheable {
 
-    public static native int task_for_pid(int taskid, int pid, IntByReference out);
+	private static final Map<Integer, MemoryBuffer> bufferCache = new HashMap<>();
+	private static final Function<Integer, MemoryBuffer> bufferCreate = MemoryBuffer::new;
 
-    public static native int mach_task_self();
+	private static final Map<Integer, byte[]> arrayCache = new HashMap<>();
+	private static final Function<Integer, byte[]> arrayCreate = byte[]::new;
 
-    public static native int vm_write(int taskId, Pointer address, Pointer buffer, int size);
+	private static final Pointer cachedPointer = new Pointer(0);
+	public static final IntByReference INT_BY_REF = new IntByReference();
+	public static final WinDef.DWORD DWORD_ZERO = new WinDef.DWORD();
 
-    public static native int vm_read(int taskId, Pointer address, int size, Pointer buffer, IntByReference ref);
+	public static MemoryBuffer buffer(int size) {
+		return bufferCache.computeIfAbsent(size, bufferCreate);
+	}
 
-    public static native int vm_read(int taskId, Pointer address, int size, PointerByReference buffer, IntByReference ref);
+	public static byte[] array(int size) {
+		return arrayCache.computeIfAbsent(size, arrayCreate);
+	}
 
-    public static native String mach_error_string(int result) throws LastErrorException;
+	public static Pointer pointer(long address) {
+		Pointer.nativeValue(cachedPointer, address);
+		return cachedPointer;
+	}
 
 }

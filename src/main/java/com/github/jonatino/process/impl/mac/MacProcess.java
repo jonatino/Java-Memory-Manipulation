@@ -22,16 +22,16 @@
  * SOFTWARE.
  */
 
-package com.beaudoin.jmm.process.impl.mac;
+package com.github.jonatino.process.impl.mac;
 
-import com.beaudoin.jmm.misc.Cacheable;
-import com.beaudoin.jmm.misc.MemoryBuffer;
-import com.beaudoin.jmm.natives.mac.mac;
-import com.beaudoin.jmm.process.AbstractProcess;
-import com.beaudoin.jmm.process.Process;
+import com.github.jonatino.misc.Cacheable;
+import com.github.jonatino.misc.MemoryBuffer;
+import com.github.jonatino.natives.mac.mac;
+import com.github.jonatino.process.AbstractProcess;
+import com.github.jonatino.process.Process;
 import com.sun.jna.Pointer;
 
-import static com.beaudoin.jmm.misc.Cacheable.INT_BY_REF;
+import static com.github.jonatino.misc.Cacheable.INT_BY_REF;
 
 /**
  * Created by Jonathan on 1/10/2016.

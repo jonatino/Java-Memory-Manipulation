@@ -22,14 +22,14 @@
  * SOFTWARE.
  */
 
-package com.beaudoin.jmm.process.impl.win32;
+package com.github.jonatino.process.impl.win32;
 
-import com.beaudoin.jmm.misc.Cacheable;
-import com.beaudoin.jmm.misc.MemoryBuffer;
-import com.beaudoin.jmm.natives.win32.Kernel32;
-import com.beaudoin.jmm.process.AbstractProcess;
-import com.beaudoin.jmm.process.Module;
-import com.beaudoin.jmm.process.Process;
+import com.github.jonatino.misc.Cacheable;
+import com.github.jonatino.misc.MemoryBuffer;
+import com.github.jonatino.natives.win32.Kernel32;
+import com.github.jonatino.process.AbstractProcess;
+import com.github.jonatino.process.Module;
+import com.github.jonatino.process.Process;
 import com.sun.jna.Native;
 import com.sun.jna.Pointer;
 import com.sun.jna.platform.win32.Tlhelp32;

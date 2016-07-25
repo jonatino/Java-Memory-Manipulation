@@ -1,4 +1,4 @@
-package com.beaudoin.jmm.process;
+package com.github.jonatino.process;
 
 import java.util.HashMap;
 import java.util.Map;
