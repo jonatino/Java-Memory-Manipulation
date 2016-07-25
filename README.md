@@ -6,7 +6,7 @@
 # Java-Memory-Manipulation
 _Java Based Memory, Process, Module Interfacing_
 
-This library is licensed under MIT License and was created for game hacking/modding via memory modifications.
+This library is licensed under LGPL v3.0 License and was created for debugging/testing security and functionality of your software.
 
 Feel free to fork or use this project as long as you credit me for my work.
 
