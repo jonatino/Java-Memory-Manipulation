@@ -10,12 +10,6 @@ buildscript {
     ext.project_version = '1.6.2'
 
     ext.jna_version = '4.3.0-SNAPSHOT'
-
-    repositories {
-        mavenCentral()
-
-        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
-    }
 }
 
 plugins {
@@ -64,7 +58,7 @@ publishing {
                     licenses {
                         license {
                             name 'The GNU General Public License, Version 3.0'
-                            url 'https://raw.githubusercontent.com/Jonatino/Java-Memory-Manipulation/master/LICENSE'
+                            url 'https://raw.githubusercontent.com/$your_github_name/$project_name/master/LICENSE'
                             distribution 'repo'
                         }
                     }
@@ -102,6 +96,12 @@ bintray {
             }
         }
     }
+}
+
+repositories {
+    mavenCentral()
+
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
 }
 
 dependencies {
