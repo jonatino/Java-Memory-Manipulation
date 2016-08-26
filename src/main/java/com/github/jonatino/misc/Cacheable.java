@@ -19,17 +19,16 @@ package com.github.jonatino.misc;
 import com.sun.jna.Pointer;
 import com.sun.jna.platform.win32.WinDef;
 import com.sun.jna.ptr.IntByReference;
+import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Function;
 
 public final class Cacheable {
 
-	private static final Map<Integer, MemoryBuffer> bufferCache = new HashMap<>();
+	private static final Int2ObjectArrayMap<MemoryBuffer> bufferCache = new Int2ObjectArrayMap<>();
 	private static final Function<Integer, MemoryBuffer> bufferCreate = MemoryBuffer::new;
 
-	private static final Map<Integer, byte[]> arrayCache = new HashMap<>();
+	private static final Int2ObjectArrayMap<byte[]> arrayCache = new Int2ObjectArrayMap<>();
 	private static final Function<Integer, byte[]> arrayCreate = byte[]::new;
 
 	private static final Pointer cachedPointer = new Pointer(0);

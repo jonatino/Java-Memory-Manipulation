@@ -16,7 +16,8 @@
 
 package com.github.jonatino.process;
 
-import java.util.HashMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
+
 import java.util.Map;
 
 /**
@@ -24,7 +25,7 @@ import java.util.Map;
  */
 public abstract class AbstractProcess implements Process {
 
-	protected Map<String, Module> modules = new HashMap<>();
+	protected Map<String, Module> modules = new Object2ObjectArrayMap<>();
 
 	private final int id;
 
@@ -42,6 +43,7 @@ public abstract class AbstractProcess implements Process {
 		Module module = modules.isEmpty() ? null : modules.get(moduleName);
 		if (module == null) {
 			initModules();
+			module = modules.isEmpty() ? null : modules.get(moduleName);
 		}
 		return module;
 	}

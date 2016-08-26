@@ -16,17 +16,15 @@
 
 package com.github.jonatino.misc;
 
+import it.unimi.dsi.fastutil.longs.Long2ObjectArrayMap;
 import net.openhft.hashing.LongHashFunction;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by Jonathan on 12/21/2015.
  */
 public final class Strings {
 
-    private static Map<Long, String> stringCache = new HashMap<>(16_982);
+    private static Long2ObjectArrayMap<String> stringCache = new Long2ObjectArrayMap<>(16_982);
 
     public static String transform(byte[] bytes) {
         long hash = LongHashFunction.xx_r39().hashBytes(bytes);

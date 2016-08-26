@@ -23,7 +23,7 @@ buildscript {
     ext.project_description = 'User friendly, Garbage-free, and cross-platform process, module and memory interfacing via the power of Java'
     ext.project_group = 'com.github.jonatino'
     ext.project_artifact = 'Java-Memory-Manipulation'
-    ext.project_version = '1.6.6'
+    ext.project_version = '1.6.7'
 
     ext.jna_version = '4.3.0-SNAPSHOT'
 }
@@ -124,4 +124,5 @@ dependencies {
     compile "net.openhft:zero-allocation-hashing:0.6"
     compile "net.java.dev.jna:jna:$jna_version"
     compile "net.java.dev.jna:jna-platform:$jna_version"
+	compile "it.unimi.dsi:fastutil:7.0.12"
 }
