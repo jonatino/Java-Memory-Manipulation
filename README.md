@@ -12,7 +12,7 @@ Feel free to fork or use this project as long as you credit me for my work.
 
 ### Gradle
 ```groovy
-compile 'com.github.jonatino:Java-Memory-Manipulation:1.6.6'
+compile 'com.github.jonatino:Java-Memory-Manipulation:2.0'
 ```
 
 ### Maven
@@ -20,7 +20,7 @@ compile 'com.github.jonatino:Java-Memory-Manipulation:1.6.6'
 <dependency>
   <groupId>com.github.jonatino</groupId>
   <artifactId>Java-Memory-Manipulation</artifactId>
-  <version>1.6.6</version>
+  <version>2.0</version>
   <type>pom</type>
 </dependency>
 ```
