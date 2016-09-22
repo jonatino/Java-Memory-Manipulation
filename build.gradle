@@ -124,5 +124,5 @@ dependencies {
     compile "net.openhft:zero-allocation-hashing:0.6"
     compile "net.java.dev.jna:jna:$jna_version"
     compile "net.java.dev.jna:jna-platform:$jna_version"
-	compile "it.unimi.dsi:fastutil:7.0.12"
+    compile "it.unimi.dsi:fastutil:7.0.13"
 }
