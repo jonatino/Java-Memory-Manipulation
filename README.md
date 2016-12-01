@@ -41,6 +41,6 @@ As of right now the project is currently not complete. The following are feature
 
 [![YourKit](https://www.yourkit.com/images/yklogo.png)](https://www.yourkit.com/java/profiler/index.jsp)
 
-We use and HIGHLY recommend YourKit Java Profiler to ensure we're getting the performance we expect.
+I use and HIGHLY recommend YourKit Java Profiler to ensure I getting the performance we all expect.
 
 Check it out at https://www.yourkit.com/
