@@ -36,3 +36,11 @@ compile 'com.github.jonatino:Java-Memory-Manipulation:2.0'
 As of right now the project is currently not complete. The following are features I plan on adding:
  - GUI
  - Documentation
+ 
+ ### Special Thanks
+
+[![YourKit](https://www.yourkit.com/images/yklogo.png)](https://www.yourkit.com/java/profiler/index.jsp)
+
+We use and HIGHLY recommend YourKit Java Profiler to ensure we're getting the performance we expect.
+
+Check it out at https://www.yourkit.com/
