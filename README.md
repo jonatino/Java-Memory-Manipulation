@@ -37,7 +37,7 @@ As of right now the project is currently not complete. The following are feature
  - GUI
  - Documentation
  
- ### Special Thanks
+### Special Thanks
 
 [![YourKit](https://www.yourkit.com/images/yklogo.png)](https://www.yourkit.com/java/profiler/index.jsp)
 
