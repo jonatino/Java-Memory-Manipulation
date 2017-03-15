@@ -25,27 +25,28 @@ import java.util.function.Function;
 
 public final class Cacheable {
 
-	private static final Int2ObjectArrayMap<MemoryBuffer> bufferCache = new Int2ObjectArrayMap<>();
+	private static final ThreadLocal<Int2ObjectArrayMap<MemoryBuffer>> bufferCache = ThreadLocal.withInitial( ()-> new Int2ObjectArrayMap<MemoryBuffer>() );
 	private static final Function<Integer, MemoryBuffer> bufferCreate = MemoryBuffer::new;
-
-	private static final Int2ObjectArrayMap<byte[]> arrayCache = new Int2ObjectArrayMap<>();
+		
+	private static final ThreadLocal<Int2ObjectArrayMap<byte[]>> arrayCache = ThreadLocal.withInitial( ()-> new Int2ObjectArrayMap<>() );
 	private static final Function<Integer, byte[]> arrayCreate = byte[]::new;
 
-	private static final Pointer cachedPointer = new Pointer(0);
+	private static final ThreadLocal<Pointer> cachedPointer = ThreadLocal.withInitial( ()-> new Pointer(0) );
+
 	public static final IntByReference INT_BY_REF = new IntByReference();
 	public static final WinDef.DWORD DWORD_ZERO = new WinDef.DWORD();
 
 	public static MemoryBuffer buffer(int size) {
-		return bufferCache.computeIfAbsent(size, bufferCreate);
+		return bufferCache.get().computeIfAbsent(size, bufferCreate);
 	}
 
 	public static byte[] array(int size) {
-		return arrayCache.computeIfAbsent(size, arrayCreate);
+		return arrayCache.get().computeIfAbsent(size, arrayCreate);
 	}
 
 	public static Pointer pointer(long address) {
-		Pointer.nativeValue(cachedPointer, address);
-		return cachedPointer;
+		Pointer.nativeValue(cachedPointer.get(), address);
+		return cachedPointer.get();
 	}
 
 }
