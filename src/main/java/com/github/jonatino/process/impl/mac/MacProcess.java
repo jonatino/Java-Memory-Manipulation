@@ -57,6 +57,15 @@ public final class MacProcess extends AbstractProcess {
 	}
 
 	@Override
+	public MemoryBuffer read(Pointer address, int size, MemoryBuffer buffer) {
+		if (mac.vm_read(task(), address, size, buffer, INT_BY_REF) != 0 || INT_BY_REF.getValue() != size) {
+			throw new RuntimeException("Read memory failed at address " + Pointer.nativeValue(address) + " size " + size);
+		}
+		Pointer.nativeValue(buffer, Pointer.nativeValue(buffer.getPointer(0)));
+		return buffer;
+	}
+	
+	@Override
 	public Process write(Pointer address, MemoryBuffer buffer) {
 		if (mac.vm_write(task(), address, buffer, buffer.size()) != 0) {
 			throw new RuntimeException("Write memory failed at address " + Pointer.nativeValue(address) + " size " + buffer.size());

@@ -18,7 +18,7 @@ package com.github.jonatino.process.impl.unix;
 
 import com.github.jonatino.misc.Cacheable;
 import com.github.jonatino.misc.MemoryBuffer;
-import com.github.jonatino.natives.unix.unix;
+import com.github.jonatino.natives.unix.unixc;
 import com.github.jonatino.process.AbstractProcess;
 import com.github.jonatino.process.Module;
 import com.github.jonatino.process.Process;
@@ -28,15 +28,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-/**
- * Created by Jonathan on 1/10/2016.
- */
-public final class UnixProcess extends AbstractProcess {
+public final class UnixProcessC extends AbstractProcess {
 
-	private ThreadLocal<unix.iovec> local = ThreadLocal.withInitial( ()-> new unix.iovec());
-	private ThreadLocal<unix.iovec> remote = ThreadLocal.withInitial( ()-> new unix.iovec());
-
-	public UnixProcess(int id) {
+	public UnixProcessC(int id) {
 		super(id);
 	}
 
@@ -45,7 +39,7 @@ public final class UnixProcess extends AbstractProcess {
 		try {
 			for (String line : Files.readAllLines(Paths.get("/proc/" + id() + "/maps"))) {
 				String[] split = line.split(" ");
-				String[] regionSplit = split[0].split("-");				
+				String[] regionSplit = split[0].split("-");
 				
 				long start = -1, end = -1, offset = -1;
 				try {
@@ -86,22 +80,15 @@ public final class UnixProcess extends AbstractProcess {
 	@Override
 	public MemoryBuffer read(Pointer address, int size) {
 		MemoryBuffer buffer = Cacheable.buffer(size);
-		local.get().iov_base = buffer;
-		remote.get().iov_base = address;
-		remote.get().iov_len = local.get().iov_len = size;
-		if (unix.process_vm_readv(id(), local.get(), 1, remote.get(), 1, 0) != size) {
+		if (unixc.mem_read(id(), Pointer.nativeValue(buffer), Pointer.nativeValue(address), size) != size) {
 			throw new RuntimeException("Read memory failed at address " + Pointer.nativeValue(address) + " size " + size);
 		}
-		
 		return buffer;
 	}
 	
 	@Override
 	public MemoryBuffer read(Pointer address, int size, MemoryBuffer buffer) {
-		local.get().iov_base = buffer;
-		remote.get().iov_base = address;
-		remote.get().iov_len = local.get().iov_len = size;
-		if (unix.process_vm_readv(id(), local.get(), 1, remote.get(), 1, 0) != size) {
+		if (unixc.mem_read(id(), Pointer.nativeValue(buffer), Pointer.nativeValue(address), size) != size) {
 			throw new RuntimeException("Read memory failed at address " + Pointer.nativeValue(address) + " size " + size);
 		}
 		return buffer;
@@ -109,10 +96,7 @@ public final class UnixProcess extends AbstractProcess {
 
 	@Override
 	public Process write(Pointer address, MemoryBuffer buffer) throws com.sun.jna.LastErrorException {		
-		local.get().iov_base = buffer;
-		remote.get().iov_base = address;
-		remote.get().iov_len = local.get().iov_len = buffer.size();
-		if (unix.process_vm_writev(id(), local.get(), 1, remote.get(), 1, 0) != buffer.size()) {
+		if (unixc.mem_write(id(), Pointer.nativeValue(buffer), Pointer.nativeValue(address), buffer.size()) != buffer.size()) {
 			throw new RuntimeException("Write memory failed at address " + Pointer.nativeValue(address) + " size " + buffer.size());
 		}
 		return this;

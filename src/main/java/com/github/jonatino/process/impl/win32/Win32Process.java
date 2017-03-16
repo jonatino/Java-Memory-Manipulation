@@ -79,4 +79,12 @@ public final class Win32Process extends AbstractProcess {
         return Kernel32.ReadProcessMemory(pointer(), address, Cacheable.buffer(size), size, 0) != 0;
     }
 
+    @Override
+    public MemoryBuffer read(Pointer address, int size, MemoryBuffer buffer) {
+        if (Kernel32.ReadProcessMemory(pointer(), address, buffer, size, 0) == 0) {
+            throw new Win32Exception(Native.getLastError());
+        }
+        return buffer;
+    }
+
 }
