@@ -2,7 +2,7 @@
 #include <sys/uio.h>
 #include "com_github_jonatino_natives_unix_unixc.h"
 
-// gcc -I/usr/lib/jvm/java-8-openjdk-amd64/include/ -I/usr/lib/jvm/java-8-openjdk-amd64/include/linux -lc -shared -fPIC -o native_mem.so com_github_jonatino_natives_unix_unixc.c
+// gcc -I/usr/lib/jvm/java-8-openjdk-amd64/include/ -I/usr/lib/jvm/java-8-openjdk-amd64/include/linux -lc -shared -fPIC -o libnative_mem.so com_github_jonatino_natives_unix_unixc.c
 
 JNIEXPORT jlong JNICALL Java_com_github_jonatino_natives_unix_unixc_mem_1read__IJJI
   (JNIEnv *env, jclass class, jint pid, jlong localaddr, jlong remoteaddr, jint length) {
