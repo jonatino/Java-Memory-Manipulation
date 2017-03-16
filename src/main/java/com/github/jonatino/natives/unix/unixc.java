@@ -8,7 +8,7 @@ public final class unixc {
 		try {
 	    	System.loadLibrary("native_mem");
 	    } catch (UnsatisfiedLinkError e) {
-	      System.err.println("Native code library failed to load.\n");
+	      System.err.println("Native library (native_mem - libnative_mem.so) failed to load!\n");
 	      e.printStackTrace();
 	      System.exit(1);
 	    }
