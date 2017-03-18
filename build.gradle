@@ -23,9 +23,7 @@ buildscript {
     ext.project_description = 'User friendly, Garbage-free, and cross-platform process, module and memory interfacing via the power of Java'
     ext.project_group = 'com.github.jonatino'
     ext.project_artifact = 'Java-Memory-Manipulation'
-    ext.project_version = '2.0'
-
-    ext.jna_version = '4.3.0-SNAPSHOT'
+    ext.project_version = '2.1.0'
 }
 
 plugins {
@@ -116,13 +114,11 @@ bintray {
 
 repositories {
     mavenCentral()
-
-    maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
 }
 
 dependencies {
-    compile "net.openhft:zero-allocation-hashing:0.6"
-    compile "net.java.dev.jna:jna:$jna_version"
-    compile "net.java.dev.jna:jna-platform:$jna_version"
+    compile "net.openhft:zero-allocation-hashing:0.8"
+    compile "net.java.dev.jna:jna:4.3.0"
+    compile "net.java.dev.jna:jna-platform:4.3.0"
     compile "it.unimi.dsi:fastutil:7.0.13"
 }
