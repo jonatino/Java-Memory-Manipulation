@@ -50,7 +50,7 @@ public final class Win32Process extends AbstractProcess {
         try {
             while (Kernel32.Module32NextW(snapshot, entry)) {
                 String name = entry.szModule();
-                modules.putIfAbsent(name, new Module(this, name, entry.hModule.getPointer(), entry.modBaseSize.intValue()));
+                modules.put(name, new Module(this, name, entry.hModule.getPointer(), entry.modBaseSize.intValue()));
             }
         } finally {
             Kernel32.CloseHandle(snapshot);
@@ -58,8 +58,7 @@ public final class Win32Process extends AbstractProcess {
     }
 
     @Override
-    public MemoryBuffer read(Pointer address, int size) {
-        MemoryBuffer buffer = Cacheable.buffer(size);
+    public MemoryBuffer read(Pointer address, int size, MemoryBuffer buffer) {
         if (Kernel32.ReadProcessMemory(pointer(), address, buffer, size, 0) == 0) {
             throw new Win32Exception(Native.getLastError());
         }

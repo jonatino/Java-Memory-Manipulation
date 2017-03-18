@@ -31,37 +31,37 @@ public final class MemoryBuffer extends Pointer {
 		this.size = size;
 	}
 
-	public MemoryBuffer putBoolean(boolean value) {
+	public MemoryBuffer writeBoolean(boolean value) {
 		setByte(0, (byte) (value ? 1 : 0));
 		return this;
 	}
 	
-	public MemoryBuffer putByte(int value) {
+	public MemoryBuffer writeByte(int value) {
 		setByte(0, (byte) value);
 		return this;
 	}
 	
-	public MemoryBuffer putShort(int value) {
+	public MemoryBuffer writeShort(int value) {
 		setShort(0, (short) value);
 		return this;
 	}
 	
-	public MemoryBuffer putInt(int value) {
+	public MemoryBuffer writeInt(int value) {
 		setInt(0, value);
 		return this;
 	}
 	
-	public MemoryBuffer putLong(long value) {
+	public MemoryBuffer writeLong(long value) {
 		setLong(0, value);
 		return this;
 	}
 	
-	public MemoryBuffer putFloat(float value) {
+	public MemoryBuffer writeFloat(float value) {
 		setFloat(0, value);
 		return this;
 	}
 	
-	public MemoryBuffer putDouble(double value) {
+	public MemoryBuffer writeDouble(double value) {
 		setDouble(0, value);
 		return this;
 	}
@@ -102,7 +102,7 @@ public final class MemoryBuffer extends Pointer {
 		return size;
 	}
 
-	public byte[] array() {
+	public byte[] getArray() {
 		byte[] data = Cacheable.array(size);
 		get(data);
 		return data;

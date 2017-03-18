@@ -63,12 +63,12 @@ public final class Module implements DataSource {
     }
 
     public MemoryBuffer data(boolean forceNew) {
-        return data == null || forceNew ? data = process().read(pointer(), size()) : data;
+        return data == null || forceNew ? data = process().read(address, size()) : data;
     }
 
     @Override
-    public MemoryBuffer read(Pointer offset, int size) {
-        return process().read(Cacheable.pointer(address() + Pointer.nativeValue(offset)), size);
+    public MemoryBuffer read(Pointer offset, int size, MemoryBuffer toBuffer) {
+        return process().read(Cacheable.pointer(address() + Pointer.nativeValue(offset)), size, toBuffer);
     }
 
     @Override

@@ -33,7 +33,7 @@ import com.sun.jna.ptr.IntByReference;
  * Created by Jonathan on 7/19/2016.
  */
 public final class Processes {
-
+	
 	public static Process byName(String name) {
 		if (Platform.isWindows()) {
 			Tlhelp32.PROCESSENTRY32.ByReference entry = new Tlhelp32.PROCESSENTRY32.ByReference();
@@ -53,30 +53,30 @@ public final class Processes {
 		} else {
 			throw new UnsupportedOperationException("Unknown operating system! (" + System.getProperty("os.name") + ")");
 		}
-		return null;
+		throw new IllegalStateException("Process '" + name + "' was not found. Are you sure its running?");
 	}
-
+	
 	public static Process byId(int id) {
 		if ((Platform.isMac() || Platform.isLinux()) && !isSudo()) {
-			throw new RuntimeException("You need to run as root/sudo in order for functionality.");
+			throw new RuntimeException("You need to run as root/sudo for unix/osx based environments.");
 		}
+		
 		if (Platform.isWindows()) {
 			return new Win32Process(id, Kernel32.OpenProcess(0x438, true, id));
+		} else if (Platform.isLinux()) {
+			return new UnixProcess(id);
 		} else if (Platform.isMac()) {
 			IntByReference out = new IntByReference();
 			if (mac.task_for_pid(mac.mach_task_self(), id, out) != 0) {
 				throw new IllegalStateException("Failed to find mach task port for process, ensure you are running as sudo.");
 			}
 			return new MacProcess(id, out.getValue());
-		} else if (Platform.isLinux()) {
-			return new UnixProcess(id);
-		} else {
-			throw new IllegalStateException("Process " + id + " was not found. Are you sure its running?");
 		}
+		throw new IllegalStateException("Process " + id + " was not found. Are you sure its running?");
 	}
-
+	
 	private static boolean isSudo() {
 		return libc.getuid() == 0;
 	}
-
+	
 }

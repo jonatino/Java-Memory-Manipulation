@@ -27,7 +27,7 @@ public final class Strings {
     private static Long2ObjectArrayMap<String> stringCache = new Long2ObjectArrayMap<>(16_982);
 
     public static String transform(byte[] bytes) {
-        long hash = LongHashFunction.xx_r39().hashBytes(bytes);
+        long hash = LongHashFunction.xx().hashBytes(bytes);
         if (stringCache.containsKey(hash)) {
             return stringCache.get(hash);
         }

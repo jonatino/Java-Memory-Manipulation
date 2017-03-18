@@ -32,21 +32,23 @@ import java.nio.file.Paths;
  * Created by Jonathan on 1/10/2016.
  */
 public final class UnixProcess extends AbstractProcess {
-
+	
 	private unix.iovec local = new unix.iovec();
 	private unix.iovec remote = new unix.iovec();
-
+	
 	public UnixProcess(int id) {
 		super(id);
+		local.setAutoSynch(false);
+		remote.setAutoSynch(false);
 	}
-
+	
 	@Override
 	public void initModules() {
 		try {
 			for (String line : Files.readAllLines(Paths.get("/proc/" + id() + "/maps"))) {
 				String[] split = line.split(" ");
 				String[] regionSplit = split[0].split("-");
-
+				
 				long start = Long.parseLong(regionSplit[0], 16);
 				long end = Long.parseLong(regionSplit[1], 16);
 				long offset = Long.parseLong(split[2], 16);
@@ -72,38 +74,36 @@ public final class UnixProcess extends AbstractProcess {
 			e.printStackTrace();
 		}
 	}
-
+	
 	@Override
-	public MemoryBuffer read(Pointer address, int size) {
-		MemoryBuffer buffer = Cacheable.buffer(size);
-		local.iov_base = buffer;
-		remote.iov_base = address;
-		remote.iov_len = local.iov_len = size;
+	public MemoryBuffer read(Pointer address, int size, MemoryBuffer buffer) {
+		populate(address, buffer);
 		if (unix.process_vm_readv(id(), local, 1, remote, 1, 0) != size) {
 			throw new RuntimeException("Read memory failed at address " + Pointer.nativeValue(address) + " size " + size);
 		}
 		return buffer;
 	}
-
+	
 	@Override
 	public Process write(Pointer address, MemoryBuffer buffer) {
-		local.iov_base = buffer;
-		remote.iov_base = address;
-		remote.iov_len = local.iov_len = buffer.size();
+		populate(address, buffer);
 		if (unix.process_vm_writev(id(), local, 1, remote, 1, 0) != buffer.size()) {
 			throw new RuntimeException("Write memory failed at address " + Pointer.nativeValue(address) + " size " + buffer.size());
 		}
 		return this;
 	}
-
+	
 	@Override
 	public boolean canRead(Pointer address, int size) {
-		try {
-			read(address, size);
-			return true;
-		} catch (Exception e) {
-			return false;
-		}
+		populate(address, Cacheable.buffer(size));
+		return unix.process_vm_readv(id(), local, 1, remote, 1, 0) == size;
 	}
-
+	
+	private void populate(Pointer address, MemoryBuffer buffer) {
+		local.writeField("iov_base", buffer);
+		local.writeField("iov_len", buffer.size());
+		remote.writeField("iov_base", address);
+		remote.writeField("iov_len", buffer.size());
+	}
+	
 }

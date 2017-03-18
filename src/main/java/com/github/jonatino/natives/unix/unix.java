@@ -36,7 +36,7 @@ public final class unix {
 	public static class iovec extends Structure {
 
 		public Pointer iov_base;
-		public int iov_len;
+		public Integer iov_len;
 
 		@Override
 		protected List<String> getFieldOrder() {
