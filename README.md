@@ -2,9 +2,8 @@
 _Java Based Memory, Process, and Module Interfacing_
 
 [![Build Status](https://travis-ci.org/Jonatino/Java-Memory-Manipulation.svg?branch=master)](https://travis-ci.org/Jonatino/Java-Memory-Manipulation)
-[![Dependency Status](https://www.versioneye.com/user/projects/578b0d13c3d40f004982a121/badge.svg?style=flat)](https://www.versioneye.com/user/projects/578b0d13c3d40f004982a121)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.jonatino/Java-Memory-Manipulation/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.jonatino/Java-Memory-Manipulation)
-[![license](https://img.shields.io/github/license/Jonatino/Java-Memory-Manipulation.svg?style=flat)](Apache License 2.0)
+![license](https://img.shields.io/github/license/Jonatino/Java-Memory-Manipulation.svg?style=flat)
 
 This library is licensed under Apache License 2.0.
 
@@ -28,18 +27,18 @@ compile 'com.github.jonatino:Java-Memory-Manipulation:2.1'
 ---
 
 ## Dependencies
-
 - [Java Native Access (JNA)](https://github.com/java-native-access/jna) as the backbone for interfacing with native libraries
+- [Zero-Allocation-Hashing](https://github.com/OpenHFT/Zero-Allocation-Hashing) for lighting quick garbage free hashing
+- [fastutil](https://github.com/vigna/fastutil) for their primitive collections and zero allocation collections
 
 ## Plans
-
  - GUI
  - Documentation
+ - Unit testing
  
 ## Special Thanks
-
 [![YourKit](https://www.yourkit.com/images/yklogo.png)](https://www.yourkit.com/java/profiler/index.jsp)
 
-I HIGHLY recommend YourKit Java Profiler to ensure I'm getting the performance we all expect.
+I highly recommend YourKit Java Profiler for any preformance critical application you make.
 
 Check it out at https://www.yourkit.com/
