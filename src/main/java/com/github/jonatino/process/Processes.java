@@ -39,7 +39,7 @@ public final class Processes {
 			Tlhelp32.PROCESSENTRY32.ByReference entry = new Tlhelp32.PROCESSENTRY32.ByReference();
 			Pointer snapshot = Kernel32.CreateToolhelp32Snapshot(Tlhelp32.TH32CS_SNAPALL.intValue(), 0);
 			try {
-				while (Kernel32.Process32Next(snapshot, entry)) {
+				while (Kernel32.Process32NextW(snapshot, entry)) {
 					String processName = Native.toString(entry.szExeFile);
 					if (name.equals(processName)) {
 						return byId(entry.th32ProcessID.intValue());

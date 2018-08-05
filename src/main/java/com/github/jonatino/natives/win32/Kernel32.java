@@ -34,8 +34,8 @@ public final class Kernel32 {
 	public static native boolean CloseHandle(Pointer pointer);
 
 	public static native Pointer OpenProcess(int desired, boolean inherit, int pid);
-
-	public static native boolean Process32Next(Pointer pointer, Tlhelp32.PROCESSENTRY32 entry);
+	
+	public static native boolean Process32NextW(Pointer pointer, Tlhelp32.PROCESSENTRY32 entry);
 
 	public static native boolean Module32NextW(Pointer pointer, Tlhelp32.MODULEENTRY32W entry);
 
