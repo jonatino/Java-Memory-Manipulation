@@ -25,6 +25,7 @@ import com.github.jonatino.process.Process;
 import com.sun.jna.Pointer;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -32,6 +33,8 @@ import java.nio.file.Paths;
  * Created by Jonathan on 1/10/2016.
  */
 public final class UnixProcess extends AbstractProcess {
+	
+	private final static BigInteger LONG_MAX_VALUE = BigInteger.valueOf(Long.MAX_VALUE);
 	
 	private unix.iovec local = new unix.iovec();
 	private unix.iovec remote = new unix.iovec();
@@ -49,26 +52,30 @@ public final class UnixProcess extends AbstractProcess {
 				String[] split = line.split(" ");
 				String[] regionSplit = split[0].split("-");
 				
-				long start = Long.parseLong(regionSplit[0], 16);
-				long end = Long.parseLong(regionSplit[1], 16);
-				long offset = Long.parseLong(split[2], 16);
-				if (offset <= 0) {
+				BigInteger start = new BigInteger(regionSplit[0], 16);
+				BigInteger end = new BigInteger(regionSplit[1], 16);
+				BigInteger offset = new BigInteger(split[2], 16);
+				
+				if (offset.longValue() <= 0 || start.compareTo(LONG_MAX_VALUE) > 0 || end.compareTo(LONG_MAX_VALUE) > 0) {
 					continue;
 				}
-				String path = "";
+				
+				StringBuilder path = new StringBuilder();
+				
 				for (int i = 5; i < split.length; i++) {
 					String s = split[i].trim();
 					if (!s.isEmpty()) {
-						path += split[i];
+						path.append(split[i]);
 					}
 					if (s.isEmpty() && ++i > split.length) {
 						break;
 					} else if (s.isEmpty() && !split[i].trim().isEmpty()) {
-						path += split[i];
+						path.append(split[i]);
 					}
 				}
-				String modulename = path.substring(path.lastIndexOf("/") + 1, path.length());
-				modules.put(modulename, new Module(this, modulename, Pointer.createConstant(start), end - start));
+				
+				String modulename = path.substring(path.lastIndexOf("/") + 1);
+				modules.put(modulename, new Module(this, modulename, Pointer.createConstant(start.longValue()), end.longValue() - start.longValue()));
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
